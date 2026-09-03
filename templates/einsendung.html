@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='img/favicon.svg') }}">
+  <link rel="alternate icon" href="{{ url_for('static', filename='img/favicon.png') }}">
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/apple-touch-icon.png') }}">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video-Einsendung – {{ channel.name }}</title>
+  <meta name="description" content="Schick deine Zug- und Bahn-Videos an {{ channel.name }} ein.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+  <!-- ============ HEADER ============ -->
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a href="/#top" class="logo">
+        {% if channel_avatar %}
+        <img class="logo-avatar" src="{{ channel_avatar }}" alt="{{ channel.name }}">
+        {% else %}
+        <span class="logo-mark">MLTV</span>
+        {% endif %}
+        <span class="logo-text">{{ channel.name }}</span>
+      </a>
+      <div class="header-badges">
+        <div class="status-badge">
+          <span class="status-dot"></span>
+          LIVE
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============ SCHNELLZUGRIFF ============ -->
+  <nav class="quicknav" aria-label="Schnellzugriff">
+    <div class="wrap quicknav-inner">
+      {% for item in nav_items %}
+      <a class="quicknav-link" href="{{ item.href }}">{{ item.label }}</a>
+      {% endfor %}
+    </div>
+  </nav>
+
+  <!-- ============ WARNSTREIFEN ============ -->
+  <div class="hazard-stripe" aria-hidden="true"></div>
+
+  <main id="top">
+    <section class="hero" style="padding: 64px 0 40px;">
+      <div class="wrap hero-inner">
+        <p class="eyebrow">Mitmachen</p>
+        <h1 class="hero-title" style="font-size: clamp(32px, 5vw, 52px);">Video-Einsendung</h1>
+        <p class="hero-tagline">
+          Du hast spannende Zug- oder Bahn-Aufnahmen gemacht - z.B. Dashcam-Videos
+          von Vorbeifahrten, Bahnübergängen oder Streckenfahrten? Schick sie mir ein,
+          die besten zeige ich auf {{ channel.name }}!
+        </p>
+        <div class="hero-cta">
+          <a href="#einreichen" class="btn btn-primary">Weiter zur Einsendung</a>
+          <a href="/#top" class="btn btn-ghost">← Zurück zur Startseite</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ ANFORDERUNGEN ============ -->
+    <section class="section">
+      <div class="wrap">
+        <p class="eyebrow">Worauf es ankommt</p>
+        <h2 class="section-title">Anforderungen an dein Video</h2>
+        <ul class="einsendung-list">
+          <li>Inhalt: nur <strong>spannende</strong> Aufnahmen - z.B. Führerstandsmitfahrten, Sonderzüge oder besondere/außergewöhnliche Ereignisse rund um Züge. Gewöhnliche Vorbeifahrten ohne besonderes Ereignis werden <strong>nicht</strong> angenommen.</li>
+          <li>Nur europäische Züge: Deutschland, Niederlande, Österreich, Frankreich, Polen, Tschechien oder Dänemark.</li>
+          <li>Mindestauflösung 1080p - je höher, desto besser, am liebsten 4K.</li>
+          <li>Querformat wird bevorzugt. Hochformat nur in Ausnahmefällen bei besonders spannendem Inhalt.</li>
+          <li>Dateiformat MP4, maximal 2 GB - bei Führerstandsmitfahrten oder besonders außergewöhnlichen Aufnahmen sind auch größere Dateien möglich.</li>
+          <li>Keine störenden Hintergrundgeräusche oder fremde Musik im Video - solche Einsendungen werden sonst abgelehnt oder der Ton wird stummgeschaltet.</li>
+          <li>Falls Personen erkennbar zu sehen sind: bitte nur mit deren Einverständnis, oder Gesichter/Kennzeichen vorher unkenntlich machen.</li>
+          <li>Du musst das Video selbst gefilmt haben oder die ausdrückliche Erlaubnis der Rechteinhaberin bzw. des Rechteinhabers besitzen.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============ EINSENDEBEDINGUNGEN ============ -->
+    <section class="section" style="border-top: 1px solid var(--border);">
+      <div class="wrap">
+        <p class="eyebrow">Bitte vorher lesen</p>
+        <h2 class="section-title">Einsendebedingungen</h2>
+        <ul class="einsendung-list">
+          <li>Mit dem Absenden bestätigst du, dass du Urheber:in des Videos bist oder die notwendigen Rechte daran besitzt.</li>
+          <li>Du räumst {{ channel.name }} ein einfaches, zeitlich und räumlich unbeschränktes Nutzungsrecht ein, das Video (ggf. geschnitten, kommentiert oder mit Musik unterlegt) auf YouTube, Instagram und weiteren Kanälen von {{ channel.name }} zu veröffentlichen.</li>
+          <li>Es besteht kein automatischer Anspruch auf Veröffentlichung. Über die Verwendung entscheidet {{ channel.name }} nach eigenem Ermessen.</li>
+          <li>Eine Vergütung für eingesendete Videos ist nicht vorgesehen, sofern nicht ausdrücklich etwas anderes vereinbart wurde.</li>
+          <li>Auf Wunsch wird dein Name bzw. Kanal bei Verwendung im Video genannt - gib das gerne im Formular an.</li>
+          <li>Du versicherst, dass mit deiner Einsendung keine Rechte Dritter verletzt werden (z.B. Persönlichkeitsrechte abgebildeter Personen, Urheberrechte an Musik, Marken- oder Kennzeichenrechte).</li>
+          <li>{{ channel.name }} behält sich vor, Einsendungen ohne Angabe von Gründen abzulehnen oder nicht zu veröffentlichen.</li>
+          <li>Die im Formular angegebenen Kontaktdaten (z.B. Name, E-Mail) werden ausschließlich zur Rückfrage bezüglich deiner Einsendung verwendet.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============ AGB ============ -->
+    <section class="section" style="border-top: 1px solid var(--border);">
+      <div class="wrap">
+        <p class="eyebrow">Rechtliches</p>
+        <h2 class="section-title">AGB / Nutzungsbedingungen für Einsendungen</h2>
+
+        <div class="videos-notice" style="margin-bottom: 24px;">
+          Hinweis: Dieser Text ist eine allgemeine Vorlage und keine
+          Rechtsberatung. Für eine rechtssichere Fassung - insbesondere bei
+          häufigeren Einsendungen oder falls der Kanal kommerziell wird -
+          empfiehlt sich die Prüfung durch eine Rechtsanwältin oder einen
+          Rechtsanwalt bzw. einen spezialisierten Dienst.
+        </div>
+
+        <ul class="einsendung-list">
+          <li><strong>1. Geltungsbereich.</strong> Diese Bedingungen gelten für alle Video-Einsendungen über das Einsende-Formular an {{ channel.name }}.</li>
+          <li><strong>2. Teilnahmeberechtigung.</strong> Die Einsendung steht grundsätzlich allen offen. Minderjährige benötigen die Zustimmung eines Erziehungsberechtigten.</li>
+          <li><strong>3. Rechteeinräumung.</strong> Mit der Einsendung räumst du {{ channel.name }} das in den Einsendebedingungen genannte Nutzungsrecht ein. Du bleibst Urheber:in deines Videos.</li>
+          <li><strong>4. Haftung.</strong> {{ channel.name }} übernimmt keine Haftung für den Verlust eingesendeter Dateien. Für den Inhalt der Einsendung (insb. Rechte Dritter) ist allein die einsendende Person verantwortlich.</li>
+          <li><strong>5. Ausschluss.</strong> Einsendungen mit rechtswidrigen, beleidigenden, gewaltverherrlichenden oder diskriminierenden Inhalten werden nicht berücksichtigt.</li>
+          <li><strong>6. Datenschutz.</strong> Die Verarbeitung übermittelter personenbezogener Daten erfolgt im Rahmen der Google-Formulare-Nutzungsbedingungen sowie ausschließlich zum Zweck der Bearbeitung der Einsendung.</li>
+          <li><strong>7. Änderungen.</strong> {{ channel.name }} behält sich vor, diese Bedingungen jederzeit anzupassen. Es gilt die zum Zeitpunkt der Einsendung veröffentlichte Fassung.</li>
+          <li><strong>8. Kontakt.</strong> Fragen zu diesen Bedingungen gerne über die WhatsApp Community oder Instagram-Kanäle von {{ channel.name }}.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section" id="einreichen" style="border-top: 1px solid var(--border); text-align: center;">
+      <div class="wrap" style="max-width: 640px;">
+        <p class="eyebrow" style="justify-content: center; display: flex;">Letzter Schritt</p>
+        <h2 class="section-title">Bereit zum Einsenden?</h2>
+        <label class="einsendung-consent">
+          <input type="checkbox" id="einsendung-consent-checkbox">
+          <span>Ich habe die Anforderungen, Einsendebedingungen und AGB oben gelesen und bin damit einverstanden.</span>
+        </label>
+        <a href="{{ form_url }}" target="_blank" rel="noopener" id="einsendung-submit-btn" class="btn btn-primary btn-disabled" aria-disabled="true">Zum Einsende-Formular</a>
+        <p class="einsendung-hint" id="einsendung-hint">Bitte zuerst das Kästchen oben anhaken.</p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      const checkbox = document.getElementById('einsendung-consent-checkbox');
+      const button = document.getElementById('einsendung-submit-btn');
+      const hint = document.getElementById('einsendung-hint');
+
+      function updateState() {
+        if (checkbox.checked) {
+          button.classList.remove('btn-disabled');
+          button.setAttribute('aria-disabled', 'false');
+          hint.style.display = 'none';
+        } else {
+          button.classList.add('btn-disabled');
+          button.setAttribute('aria-disabled', 'true');
+          hint.style.display = 'block';
+        }
+      }
+
+      checkbox.addEventListener('change', updateState);
+
+      button.addEventListener('click', function (e) {
+        if (!checkbox.checked) {
+          e.preventDefault();
+          hint.style.color = 'var(--accent)';
+        }
+      });
+
+      updateState();
+    })();
+  </script>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <span>{{ channel.name }} © 2026</span>
+      <span class="footer-sep">·</span>
+      <span>Erstellt mit Python &amp; Flask &amp; AI</span>
+    </div>
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

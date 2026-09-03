@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='img/favicon.svg') }}">
+  <link rel="alternate icon" href="{{ url_for('static', filename='img/favicon.png') }}">
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/apple-touch-icon.png') }}">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ channel.name }}</title>
+  <meta name="description" content="{{ channel.tagline }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+  <!-- ============ HEADER ============ -->
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a href="#top" class="logo">
+        {% if channel_avatar %}
+        <img class="logo-avatar" src="{{ channel_avatar }}" alt="{{ channel.name }}">
+        {% else %}
+        <span class="logo-mark">MLTV</span>
+        {% endif %}
+        <span class="logo-text">{{ channel.name }}</span>
+      </a>
+      <div class="header-badges">
+        <div class="status-badge">
+          <span class="status-dot"></span>
+          LIVE
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============ SCHNELLZUGRIFF ============ -->
+  <nav class="quicknav" aria-label="Schnellzugriff">
+    <div class="wrap quicknav-inner">
+      {% for item in nav_items %}
+      <a class="quicknav-link" href="{{ item.href }}">{{ item.label }}</a>
+      {% endfor %}
+    </div>
+  </nav>
+
+  <!-- ============ WARNSTREIFEN ============ -->
+  <div class="hazard-stripe" aria-hidden="true"></div>
+
+  <!-- ============ TICKER ============ -->
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track">
+      {% for i in range(2) %}
+      <span class="ticker-item">{{ channel.name }}</span>
+      <span class="ticker-sep">//</span>
+      {% for link in links %}
+      <span class="ticker-item">{{ link.name }}: {{ link.handle }}</span>
+      <span class="ticker-sep">//</span>
+      {% endfor %}
+      {% for video in latest_videos %}
+      <span class="ticker-item">NEUES VIDEO: {{ video.title }}</span>
+      <span class="ticker-sep">//</span>
+      {% endfor %}
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- ============ HERO ============ -->
+  <main id="top">
+    <section class="hero">
+      <div class="wrap hero-inner">
+        <p class="eyebrow">YouTube-Kanal</p>
+        <h1 class="hero-title">{{ channel.name }}</h1>
+        <p class="hero-tagline">{{ channel.tagline }}</p>
+        <div class="hero-cta">
+          {% if links %}
+          <a href="{{ links[0].url }}" target="_blank" rel="noopener" class="btn btn-primary">
+            {{ links[0].name }} abonnieren
+          </a>
+          {% endif %}
+          <a href="#links" class="btn btn-ghost">Alle Kanäle</a>
+        </div>
+      </div>
+      <div class="hero-avatar-wrap">
+        {% if channel_avatar %}
+        <img class="hero-avatar" src="{{ channel_avatar }}" alt="{{ channel.name }}">
+        {% else %}
+        <div class="hero-frame" aria-hidden="true">
+          <span class="frame-label">YouTube</span>
+        </div>
+        {% endif %}
+      </div>
+    </section>
+
+    <!-- ============ ABONNENTEN-ZIEL ============ -->
+    <section class="section stats" id="stats">
+      <div class="wrap">
+        {% if subscriber_count is not none %}
+        <div class="stat-block">
+          <span class="stat-number">{{ "{:,}".format(subscriber_count).replace(",", ".") }}</span>
+          <span class="stat-label">Abonnenten</span>
+        </div>
+        <div class="stat-progress">
+          <div class="stat-progress-bar" style="width: {{ subscriber_progress_percent }}%;"></div>
+        </div>
+        {% if subscriber_remaining and subscriber_remaining > 0 %}
+        <p class="stat-note">
+          Noch <strong>{{ "{:,}".format(subscriber_remaining).replace(",", ".") }}</strong>
+          Abonnenten bis {{ "{:,}".format(subscriber_goal).replace(",", ".") }}!
+        </p>
+        {% else %}
+        <p class="stat-note">🎉 Ziel von {{ "{:,}".format(subscriber_goal).replace(",", ".") }} Abonnenten erreicht!</p>
+        {% endif %}
+        {% elif videos_error %}
+        <p class="stat-note">{{ videos_error }}</p>
+        {% else %}
+        <p class="stat-note">Die Abonnentenzahl ist auf YouTube derzeit ausgeblendet.</p>
+        {% endif %}
+      </div>
+    </section>
+
+    <!-- ============ ABOUT ============ -->
+    <section class="section about" id="about">
+      <div class="wrap">
+        <p class="eyebrow">Über mich</p>
+        <p class="about-text">{{ channel.bio }}</p>
+      </div>
+    </section>
+
+    <!-- ============ VIDEOS ERROR ============ -->
+    {% if videos_error %}
+    <section class="section">
+      <div class="wrap">
+        <div class="videos-notice">{{ videos_error }}</div>
+      </div>
+    </section>
+    {% endif %}
+
+    <!-- ============ NEUESTE VIDEOS (Abfahrtstafel-Stil) ============ -->
+    {% if latest_videos %}
+    <section class="section news" id="latest-videos">
+      <div class="wrap">
+        <p class="eyebrow">Automatisch aktuell</p>
+        <h2 class="section-title">Neueste Videos</h2>
+        <div class="departure-board">
+          {% for video in latest_videos %}
+          <a class="departure-row" href="{{ video.url }}" target="_blank" rel="noopener">
+            <span class="departure-thumb" style="background-image:url('{{ video.thumbnail }}')"></span>
+            <span class="departure-title">{{ video.title }}</span>
+            <span class="departure-meta">
+              {{ video.published_at }}
+              <span class="departure-views">{{ "{:,}".format(video.views).replace(",", ".") }} Aufrufe</span>
+            </span>
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+    {% endif %}
+
+    <!-- ============ TOP VIDEOS ============ -->
+    {% if top_videos %}
+    <section class="section news" id="top-videos">
+      <div class="wrap">
+        <p class="eyebrow">Meistgesehen</p>
+        <h2 class="section-title">Top Videos</h2>
+        <div class="video-grid">
+          {% for video in top_videos %}
+          <a class="video-card" href="{{ video.url }}" target="_blank" rel="noopener">
+            <span class="video-thumb" style="background-image:url('{{ video.thumbnail }}')">
+              <span class="video-play">▶</span>
+              <span class="video-rank">#{{ loop.index }}</span>
+            </span>
+            <span class="video-body">
+              <span class="video-title">{{ video.title }}</span>
+              <span class="video-meta">{{ "{:,}".format(video.views).replace(",", ".") }} Aufrufe</span>
+            </span>
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+    {% endif %}
+
+    <!-- ============ NEUESTE SHORTS ============ -->
+    {% if latest_shorts %}
+    <section class="section news" id="latest-shorts">
+      <div class="wrap">
+        <p class="eyebrow">Automatisch aktuell</p>
+        <h2 class="section-title">Neueste Shorts</h2>
+        <div class="video-grid video-grid--shorts">
+          {% for video in latest_shorts %}
+          <a class="video-card video-card--short" href="{{ video.url }}" target="_blank" rel="noopener">
+            <span class="video-thumb video-thumb--short" style="background-image:url('{{ video.thumbnail }}')">
+              <span class="video-play">▶</span>
+            </span>
+            <span class="video-body">
+              <span class="video-title">{{ video.title }}</span>
+              <span class="video-meta">{{ video.published_at }} · {{ "{:,}".format(video.views).replace(",", ".") }} Aufrufe</span>
+            </span>
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+    {% endif %}
+
+    <!-- ============ TOP SHORTS ============ -->
+    {% if top_shorts %}
+    <section class="section news" id="top-shorts">
+      <div class="wrap">
+        <p class="eyebrow">Meistgesehen</p>
+        <h2 class="section-title">Top Shorts</h2>
+        <div class="video-grid video-grid--shorts">
+          {% for video in top_shorts %}
+          <a class="video-card video-card--short" href="{{ video.url }}" target="_blank" rel="noopener">
+            <span class="video-thumb video-thumb--short" style="background-image:url('{{ video.thumbnail }}')">
+              <span class="video-play">▶</span>
+              <span class="video-rank">#{{ loop.index }}</span>
+            </span>
+            <span class="video-body">
+              <span class="video-title">{{ video.title }}</span>
+              <span class="video-meta">{{ "{:,}".format(video.views).replace(",", ".") }} Aufrufe</span>
+            </span>
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+    {% endif %}
+
+    <!-- ============ PLAYLISTS ============ -->
+    {% if playlists %}
+    <section class="section news" id="playlists">
+      <div class="wrap">
+        <p class="eyebrow">Sammlungen</p>
+        <h2 class="section-title">Playlists</h2>
+        <div class="video-grid">
+          {% for playlist in playlists %}
+          <a class="video-card" href="{{ playlist.url }}" target="_blank" rel="noopener">
+            <span class="video-thumb" style="background-image:url('{{ playlist.thumbnail }}')">
+              <span class="video-play">▶</span>
+              <span class="video-rank">{{ playlist.item_count }} Videos</span>
+            </span>
+            <span class="video-body">
+              <span class="video-title">{{ playlist.title }}</span>
+            </span>
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+    {% endif %}
+
+    <!-- ============ EVENTS ============ -->
+    <section class="section news" id="events">
+      <div class="wrap">
+        <p class="eyebrow">Termine</p>
+        <h2 class="section-title">Events</h2>
+        {% if events %}
+        <div class="news-list">
+          {% for event in events %}
+          <article class="news-card">
+            <div class="news-meta">
+              <span class="news-tag">TERMIN</span>
+              <span class="news-date">{{ event.date }}</span>
+            </div>
+            <h3 class="news-title">{{ event.title }}</h3>
+            <p class="news-text">{{ event.description }}</p>
+            {% if event.link %}
+            <a class="btn btn-ghost" href="{{ event.link }}" target="_blank" rel="noopener" style="margin-top: 14px;">Mehr erfahren</a>
+            {% endif %}
+          </article>
+          {% endfor %}
+        </div>
+        {% else %}
+        <div class="videos-notice">Aktuell sind keine Events geplant - schau bald wieder vorbei!</div>
+        {% endif %}
+      </div>
+    </section>
+
+    <!-- ============ LINKS ============ -->
+    <section class="section links" id="links">
+      <div class="wrap">
+        <p class="eyebrow">Kanäle</p>
+        <h2 class="section-title">Folge Max-Luka TV</h2>
+        <div class="links-grid">
+          {% for link in links %}
+          <a class="link-card {% if link.featured %}link-card--featured{% endif %}" href="{{ link.url }}" target="_blank" rel="noopener">
+            {% if link.featured %}<span class="link-badge">★ Community-Favorit</span>{% endif %}
+            <span class="link-icon" data-icon="{{ link.icon }}"></span>
+            <span class="link-body">
+              <span class="link-name">{{ link.name }}</span>
+              <span class="link-handle">{{ link.handle }}</span>
+              <span class="link-desc">{{ link.description }}</span>
+            </span>
+            <span class="link-arrow">→</span>
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <span>{{ channel.name }} © 2026</span>
+      <span class="footer-sep">·</span>
+      <span>Erstellt mit Python &amp; Flask &amp; AI</span>
+    </div>
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
