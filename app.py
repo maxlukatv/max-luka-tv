@@ -114,8 +114,123 @@ NAV_ITEMS = [
     {"label": "Events", "href": "/event"},
     {"label": "News", "href": "/news"},
     {"label": "Einsendung", "href": "/einsendung"},
+    {"label": "Schiene & Weiche", "href": "/schiene_und_weiche"},
     {"label": "Kanäle", "href": "/#links"},
 ]
+
+# ---------------------------------------------------------------------------
+# Community-Seite "Schiene und Weiche"
+# ---------------------------------------------------------------------------
+
+SCHIENE_UND_WEICHE = {
+    "name": "Schiene und Weiche",
+    "tagline": "Die WhatsApp-Community rund um Züge, Bahn und Eisenbahn-Content.",
+    "bio": (
+        "Schiene und Weiche ist unsere WhatsApp-Community für alle, die Züge "
+        "und Bahn genauso lieben wie ich. Hier tauschen wir uns aus, teilen "
+        "Aufnahmen und bleiben gemeinsam auf dem Laufenden."
+    ),
+    # Aktuelle Mitgliederzahl - bitte von Zeit zu Zeit von Hand aktualisieren,
+    # da WhatsApp keine automatische Abfrage der Mitgliederzahl erlaubt.
+    "member_count": 30,
+    "whatsapp_link": "https://chat.whatsapp.com/JeiNjBWYGNe3rXNjxwJ2hA?s=cl&p=a&ilr=2",
+    "instagram_link": "https://www.instagram.com/schiene_und_weiche/",
+    "instagram_handle": "@schiene_und_weiche",
+    "contact_email": "schieneundweiche9@gmail.com",
+}
+
+# Was die Community bietet
+SCHIENE_ANGEBOTE = [
+    {
+        "title": "Chatten & Austauschen",
+        "text": "Quatscht mit Gleichgesinnten über alles rund um Züge und Bahn.",
+    },
+    {
+        "title": "Zug-Fotos & Videos teilen",
+        "text": "Teilt eure eigenen Aufnahmen und schaut euch die der anderen an.",
+    },
+    {
+        "title": "Bahn-Störungen sofort",
+        "text": "Wir informieren euch schnell über aktuelle Störungen im Bahnverkehr.",
+    },
+    {
+        "title": "Sonderzug-Fahrpläne",
+        "text": "Infos zu Sonderzügen und ihren Fahrplänen aus erster Hand.",
+    },
+    {
+        "title": "Regelmäßige Events",
+        "text": "Von gemeinsamen Aktionen bis zu Community-Terminen ist immer was los.",
+    },
+]
+
+# Admin-Team, in der Reihenfolge, wie sie angezeigt werden sollen
+SCHIENE_ADMINS = [
+    {"name": "Max-Luka TV", "role": "Owner"},
+    {"name": "Louis", "role": "Admin - Management Leiter"},
+    {"name": "Thomas", "role": "Head Admin"},
+    {"name": "‹Ul®|CH›", "role": "General Admin"},
+]
+
+# Community-Regeln - werden auf der Seite eingeklappt angezeigt
+SCHIENE_REGELN = [
+    {
+        "title": "Respekt und Höflichkeit",
+        "text": "Bitte behandle alle Mitglieder mit Respekt. Beleidige und diskriminiere niemanden.",
+    },
+    {
+        "title": "Themenbezogene Beiträge",
+        "text": "Schreibe bitte nur themenbezogene Beiträge in die jeweiligen Gruppen.",
+    },
+    {
+        "title": "Keine Werbung",
+        "text": "Bitte mache keine Werbung für Produkte, Dienstleistungen oder andere Gruppen/Communitys/Kanäle.",
+    },
+    {
+        "title": "Privatsphäre respektieren",
+        "text": "Teile bitte keine persönlichen Informationen von und über andere ohne deren Zustimmung.",
+    },
+    {
+        "title": "Keine Spam-Nachrichten",
+        "text": "Vermeide das Senden von Kettenbriefen, schicke nicht unnötig viele Sticker und übertreibe nicht mit Nachrichten.",
+    },
+    {
+        "title": "Kritik gegenüber Admins und Mitgliedern",
+        "text": "Wenn du Kritik übst, bleibe immer respektvoll und konstruktiv.",
+    },
+    {
+        "title": "Respektiere die Admins",
+        "text": "Widersetze dich nicht den Admins und diskutiere nicht mit ihnen.",
+    },
+    {
+        "title": "Keine illegalen Inhalte",
+        "text": "Sende bitte keine illegalen, obszönen oder unangemessenen Nachrichten.",
+    },
+    {
+        "title": "Nachrichten in den Chats",
+        "text": "Verwende bitte immer eine angemessene Sprache und beleidige keine Mitglieder.",
+    },
+    {
+        "title": "Probleme/Streitereien melden",
+        "text": "Bei Anregungen oder Streitereien melde dich bitte bei einem Admin. Melde uns auch Regelverstöße.",
+    },
+    {
+        "title": "Mitgliederlabel",
+        "text": "Bitte verwende keine bösen oder obszönen Inhalte - nutze am besten deinen Künstlernamen oder ein Kürzel.",
+    },
+    {
+        "title": "Chat-Sperrungen",
+        "text": "Bitte beachte Chatsperren und schreibe während einer aktiven Sperre nicht in andere Gruppen.",
+    },
+]
+
+SCHIENE_STRAFEN_HINWEIS = (
+    "Bei Nichtbeachten der Regeln droht eine Verwarnung, eine schwere "
+    "Verwarnung oder der Ausschluss aus unserer Community. Eine Verwarnung "
+    "dauert zwischen 2 und 24 Stunden an - bei einer erneuten Verwarnung "
+    "während dieser Zeit werden 24 Stunden addiert. Eine schwere Verwarnung "
+    "dauert 1-3 Wochen an; bei einer erneuten Verwarnung während dieser "
+    "Zeit folgt der Ausschluss."
+)
 
 # Wie viele Videos/Shorts/Playlists jeweils angezeigt werden
 LATEST_VIDEOS_COUNT = 5
@@ -495,6 +610,21 @@ def einsendung():
         links=LINKS,
         nav_items=NAV_ITEMS,
         form_url=EINSENDUNG_FORM_URL,
+        channel_avatar=_get_channel_avatar_safe(),
+    )
+
+
+@app.route("/schiene_und_weiche")
+def schiene_und_weiche():
+    return render_template(
+        "schiene_und_weiche.html",
+        channel=CHANNEL,
+        nav_items=NAV_ITEMS,
+        community=SCHIENE_UND_WEICHE,
+        angebote=SCHIENE_ANGEBOTE,
+        admins=SCHIENE_ADMINS,
+        regeln=SCHIENE_REGELN,
+        strafen_hinweis=SCHIENE_STRAFEN_HINWEIS,
         channel_avatar=_get_channel_avatar_safe(),
     )
 
