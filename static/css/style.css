@@ -757,6 +757,7 @@ a {
 
 .new-badge {
   display: inline-flex;
+  align-self: flex-start;
   align-items: center;
   font-family: var(--font-mono);
   font-size: 11px;
