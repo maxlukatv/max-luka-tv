@@ -144,9 +144,12 @@
         <h2 class="section-title">Neueste Videos</h2>
         <div class="departure-board">
           {% for video in latest_videos %}
-          <a class="departure-row" href="{{ video.url }}" target="_blank" rel="noopener">
+          <a class="departure-row {% if video.is_new %}departure-row--new{% endif %}" href="{{ video.url }}" target="_blank" rel="noopener">
             <span class="departure-thumb" style="background-image:url('{{ video.thumbnail }}')"></span>
-            <span class="departure-title">{{ video.title }}</span>
+            <span class="departure-body">
+              {% if video.is_new %}<span class="new-badge">NEU</span>{% endif %}
+              <span class="departure-title">{{ video.title }}</span>
+            </span>
             <span class="departure-meta">
               {{ video.published_at }}
               <span class="departure-views">{{ "{:,}".format(video.views).replace(",", ".") }} Aufrufe</span>
@@ -190,9 +193,10 @@
         <h2 class="section-title">Neueste Shorts</h2>
         <div class="video-grid video-grid--shorts">
           {% for video in latest_shorts %}
-          <a class="video-card video-card--short" href="{{ video.url }}" target="_blank" rel="noopener">
+          <a class="video-card video-card--short {% if video.is_new %}video-card--new{% endif %}" href="{{ video.url }}" target="_blank" rel="noopener">
             <span class="video-thumb video-thumb--short" style="background-image:url('{{ video.thumbnail }}')">
               <span class="video-play">▶</span>
+              {% if video.is_new %}<span class="new-badge">NEU</span>{% endif %}
             </span>
             <span class="video-body">
               <span class="video-title">{{ video.title }}</span>

@@ -1,6 +1,7 @@
 import os
 import re
 import time
+from datetime import datetime
 
 import requests
 from flask import Flask, render_template
@@ -412,11 +413,19 @@ def _fetch_recent_videos_with_stats():
             duration_seconds = _parse_iso8601_duration(
                 v.get("contentDetails", {}).get("duration")
             )
+            published_at_str = snippet.get("publishedAt", "")[:10]
+            is_new = False
+            if published_at_str:
+                try:
+                    published_date = datetime.strptime(published_at_str, "%Y-%m-%d")
+                    is_new = (datetime.now() - published_date).days < 7
+                except ValueError:
+                    is_new = False
             videos.append(
                 {
                     "id": vid,
                     "title": snippet.get("title", ""),
-                    "published_at": snippet.get("publishedAt", "")[:10],
+                    "published_at": published_at_str,
                     "thumbnail": thumb.get("url", ""),
                     "url": (
                         f"https://www.youtube.com/shorts/{vid}"
@@ -426,6 +435,7 @@ def _fetch_recent_videos_with_stats():
                     "views": int(v.get("statistics", {}).get("viewCount", 0)),
                     "duration_seconds": duration_seconds,
                     "is_short": bool(duration_seconds) and duration_seconds <= SHORT_MAX_SECONDS,
+                    "is_new": is_new,
                 }
             )
 

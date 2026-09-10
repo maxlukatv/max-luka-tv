@@ -755,6 +755,82 @@ a {
   aspect-ratio: 9 / 16;
 }
 
+.new-badge {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #ffffff;
+  background: var(--accent);
+  border-radius: 5px;
+  padding: 3px 8px;
+  animation: pulse 1.8s infinite;
+}
+
+.departure-body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.departure-row--new {
+  padding: 22px 16px;
+  background: var(--surface);
+  border-radius: var(--radius);
+  border: 1px solid var(--accent);
+  margin: 4px 0;
+}
+
+.departure-row--new .departure-thumb {
+  width: 150px;
+}
+
+.departure-row--new .departure-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 20px;
+  -webkit-line-clamp: 2;
+}
+
+.departure-row--new .departure-meta {
+  font-size: 14px;
+}
+
+@media (max-width: 560px) {
+  .departure-row--new {
+    grid-template-columns: 100px 1fr;
+  }
+  .departure-row--new .departure-thumb {
+    width: 100px;
+  }
+}
+
+.video-card--new {
+  border: 2px solid var(--accent);
+  grid-column: span 2;
+}
+
+.video-card--new .video-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.video-card--new .new-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1;
+}
+
+@media (max-width: 420px) {
+  .video-card--new {
+    grid-column: span 1;
+  }
+}
+
 /* ---------------------------- Einsendung ---------------------------- */
 
 .einsendung-list {
