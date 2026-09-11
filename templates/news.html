@@ -78,6 +78,7 @@
         {% if news_items %}
         <div class="news-list">
           {% for item in news_items %}
+          {% if item.link %}<a href="{{ item.link }}" target="_blank" rel="noopener" style="text-decoration:none; color:inherit;">{% endif %}
           <article class="news-card">
             <div class="news-meta">
               <span class="news-tag">{{ item.tag }}</span>
@@ -85,7 +86,9 @@
             </div>
             <h3 class="news-title">{{ item.title }}</h3>
             <p class="news-text">{{ item.text }}</p>
+            {% if item.link %}<p class="news-text" style="color: var(--accent-2); font-weight: 600; margin-top: 8px;">Ansehen →</p>{% endif %}
           </article>
+          {% if item.link %}</a>{% endif %}
           {% endfor %}
         </div>
         {% else %}

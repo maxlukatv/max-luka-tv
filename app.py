@@ -77,27 +77,72 @@ LINKS = [
 # },
 EVENTS = []
 
-# News/Ankündigungen für die eigene News-Seite. Neuester Eintrag zuerst.
+# Manuelle Sonder-Ankündigungen (z.B. für Dinge, die nichts mit einem
+# einzelnen Video zu tun haben). Neuester Eintrag zuerst. Kann leer bleiben -
+# die News-Seite füllt sich automatisch mit deinen neuesten Videos/Shorts.
 NEWS_ITEMS = [
-    {
-        "date": "18.08.2026",
-        "tag": "NEUES VIDEO",
-        "title": "Neues Video ist online!",
-        "text": "Schaut unbedingt vorbei und lasst gerne ein Like da.",
-    },
     {
         "date": "10.08.2026",
         "tag": "COMMUNITY",
         "title": "WhatsApp Community gestartet",
         "text": "Ab sofort gibt's die WhatsApp-Gruppe 'Schiene und Weiche' fuer News, Umfragen und direkten Austausch.",
     },
-    {
-        "date": "01.08.2026",
-        "tag": "ANKÜNDIGUNG",
-        "title": "Neuer Upload-Plan",
-        "text": "Ab jetzt gibt es regelmaessig neue Inhalte - bleibt gespannt, was als Naechstes kommt!",
-    },
 ]
+
+# Wie viele automatisch generierte Video/Short-News maximal angezeigt werden
+AUTO_NEWS_COUNT = 12
+
+
+def _format_date_de(iso_date_str):
+    """Wandelt 'YYYY-MM-DD' in 'DD.MM.YYYY' um, fuer einheitliche Anzeige."""
+    try:
+        return datetime.strptime(iso_date_str, "%Y-%m-%d").strftime("%d.%m.%Y")
+    except (ValueError, TypeError):
+        return iso_date_str
+
+
+def _parse_de_date(date_str):
+    """Wandelt 'DD.MM.YYYY' in ein datetime-Objekt um, fuer die Sortierung."""
+    try:
+        return datetime.strptime(date_str, "%d.%m.%Y")
+    except (ValueError, TypeError):
+        return datetime.min
+
+
+def get_news_items():
+    """
+    Baut die vollständige News-Liste zusammen: automatisch generierte
+    Einträge aus den neuesten Videos/Shorts + deine manuellen
+    Sonder-Ankündigungen, neuester Eintrag zuerst.
+    """
+    auto_items = []
+    try:
+        for video in get_latest_videos():
+            auto_items.append(
+                {
+                    "date": _format_date_de(video["published_at"]),
+                    "tag": "NEUES VIDEO",
+                    "title": video["title"],
+                    "text": "Ein neues Video ist online - schau unbedingt vorbei und lass gerne ein Like da!",
+                    "link": video["url"],
+                }
+            )
+        for short in get_latest_shorts():
+            auto_items.append(
+                {
+                    "date": _format_date_de(short["published_at"]),
+                    "tag": "NEUER SHORT",
+                    "title": short["title"],
+                    "text": "Ein neuer Short ist online - schau ihn dir an!",
+                    "link": short["url"],
+                }
+            )
+    except Exception as e:
+        print("NEWS-FEHLER (automatische Videos):", repr(e))
+
+    all_items = list(NEWS_ITEMS) + auto_items
+    all_items.sort(key=lambda item: _parse_de_date(item["date"]), reverse=True)
+    return all_items[:AUTO_NEWS_COUNT]
 
 # Ziel-Marke für die Abonnenten-Fortschrittsanzeige
 SUBSCRIBER_GOAL = 5000
@@ -595,7 +640,7 @@ def news():
         channel=CHANNEL,
         links=LINKS,
         nav_items=NAV_ITEMS,
-        news_items=NEWS_ITEMS,
+        news_items=get_news_items(),
         channel_avatar=_get_channel_avatar_safe(),
     )
 
