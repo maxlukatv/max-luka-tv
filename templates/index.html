@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
+  <script>
+    (function () {
+      try {
+        if (localStorage.getItem('mltv-theme') === 'dark') {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+      } catch (e) {}
+    })();
+  </script>
   <meta charset="UTF-8">
   <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='img/favicon.svg') }}">
   <link rel="alternate icon" href="{{ url_for('static', filename='img/favicon.png') }}">
@@ -34,6 +43,12 @@
       </div>
     </div>
   </header>
+
+  <!-- ============ HELL-/DUNKELMODUS-KETTCHEN ============ -->
+  <button type="button" class="theme-pull" aria-label="Zu Dunkelmodus wechseln">
+    <span class="theme-pull-cord"></span>
+    <span class="theme-pull-knob">☀️</span>
+  </button>
 
   <!-- ============ SCHNELLZUGRIFF ============ -->
   <nav class="quicknav" aria-label="Schnellzugriff">
