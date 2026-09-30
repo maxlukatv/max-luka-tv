@@ -4,7 +4,9 @@ import time
 from datetime import datetime
 
 import requests
-from flask import Flask, render_template
+from flask import Flask, render_template, jsonify
+
+import signale_daten
 
 app = Flask(__name__)
 
@@ -161,6 +163,7 @@ NAV_ITEMS = [
     {"label": "News", "href": "/news"},
     {"label": "Einsendung", "href": "/einsendung"},
     {"label": "Schiene & Weiche", "href": "/schiene_und_weiche"},
+    {"label": "Signale lernen", "href": "/signale_lernen"},
     {"label": "Kanäle", "href": "/#links"},
 ]
 
@@ -682,6 +685,25 @@ def schiene_und_weiche():
         strafen_hinweis=SCHIENE_STRAFEN_HINWEIS,
         channel_avatar=_get_channel_avatar_safe(),
     )
+
+
+@app.route("/signale_lernen")
+def signale_lernen():
+    return render_template(
+        "signale_lernen.html",
+        channel=CHANNEL,
+        nav_items=NAV_ITEMS,
+        multiplikator=signale_daten.MULTIPLIKATOR,
+        fragen_pro_runde=signale_daten.FRAGEN_PRO_RUNDE,
+        channel_avatar=_get_channel_avatar_safe(),
+    )
+
+
+@app.route("/signale_lernen/fragen/<schwierigkeit>")
+def signale_lernen_fragen(schwierigkeit):
+    if schwierigkeit not in signale_daten.POOLS:
+        schwierigkeit = "leicht"
+    return jsonify(signale_daten.baue_fragen(schwierigkeit))
 
 
 if __name__ == "__main__":

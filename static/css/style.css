@@ -1245,6 +1245,166 @@ a {
   line-height: 1.6;
 }
 
+/* ---------------------------- Signale-Lernspiel ---------------------------- */
+
+.signal-diff-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 18px;
+}
+
+.signal-diff-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  text-align: left;
+  font-family: var(--font-body);
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+
+.signal-diff-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-3px);
+}
+
+.signal-diff-title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 32px;
+  line-height: 1;
+  color: var(--accent);
+}
+
+.signal-diff-desc {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.signal-diff-mult {
+  margin-top: 6px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  color: #ffffff;
+  background: var(--accent);
+  border-radius: 5px;
+  padding: 3px 9px;
+}
+
+.signal-quiz-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 10px;
+}
+
+.signal-quiz-progress {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--steel);
+}
+
+.signal-quiz-score {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 22px;
+  color: var(--accent);
+}
+
+.signal-quiz-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 32px 28px;
+  text-align: center;
+}
+
+.signal-quiz-bild {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.signal-quiz-bild svg {
+  width: 150px;
+  height: 150px;
+}
+
+.signal-quiz-frage {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 28px;
+  line-height: 1.15;
+  margin: 0 0 24px;
+}
+
+.signal-quiz-optionen {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 12px;
+}
+
+.signal-option-btn {
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text);
+  text-align: left;
+  line-height: 1.4;
+  background: var(--bg);
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 18px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.signal-option-btn:hover:not(:disabled) {
+  border-color: var(--accent);
+}
+
+.signal-option-btn:disabled {
+  cursor: default;
+}
+
+.signal-option-correct {
+  border-color: #1f8a3a;
+  background: rgba(31, 138, 58, 0.12);
+}
+
+.signal-option-wrong {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.signal-quiz-feedback {
+  min-height: 24px;
+  margin: 20px 0 0;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.signal-quiz-feedback--richtig {
+  color: #1f8a3a;
+}
+
+.signal-quiz-feedback--falsch {
+  color: var(--accent);
+}
+
+@media (max-width: 560px) {
+  .signal-quiz-card { padding: 24px 16px; }
+  .signal-quiz-frage { font-size: 22px; }
+}
+
 /* ---------------------------- Hell-/Dunkelmodus-Kettchen ---------------------------- */
 
 .theme-pull {
