@@ -693,17 +693,16 @@ def signale_lernen():
         "signale_lernen.html",
         channel=CHANNEL,
         nav_items=NAV_ITEMS,
-        multiplikator=signale_daten.MULTIPLIKATOR,
         fragen_pro_runde=signale_daten.FRAGEN_PRO_RUNDE,
+        sound_max=signale_daten.SOUND_MAX_ABSPIELEN,
+        katalog=signale_daten.baue_katalog(),
         channel_avatar=_get_channel_avatar_safe(),
     )
 
 
-@app.route("/signale_lernen/fragen/<schwierigkeit>")
-def signale_lernen_fragen(schwierigkeit):
-    if schwierigkeit not in signale_daten.POOLS:
-        schwierigkeit = "leicht"
-    return jsonify(signale_daten.baue_fragen(schwierigkeit))
+@app.route("/signale_lernen/fragen")
+def signale_lernen_fragen():
+    return jsonify(signale_daten.baue_fragen())
 
 
 if __name__ == "__main__":
