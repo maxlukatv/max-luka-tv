@@ -1245,6 +1245,32 @@ a {
   line-height: 1.6;
 }
 
+/* ---------------------------- Signale: Hinweis, Umschalter, Katalog, Sound ---------------------------- */
+
+.signal-disclaimer { display: flex; gap: 16px; align-items: flex-start; background: var(--accent-soft); border: 2px solid var(--accent); border-radius: var(--radius); padding: 20px 24px; margin-bottom: 8px; }
+.signal-disclaimer-icon { font-size: 28px; line-height: 1; flex-shrink: 0; }
+.signal-disclaimer p { margin: 0; font-size: 15px; line-height: 1.6; color: var(--text); }
+
+.signal-mode-switch { display: flex; gap: 10px; margin-bottom: 32px; flex-wrap: wrap; }
+.signal-mode-btn { font-family: var(--font-body); font-weight: 600; font-size: 15px; color: var(--text-muted); background: var(--surface); border: 2px solid var(--border); border-radius: 10px; padding: 12px 20px; cursor: pointer; transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease; }
+.signal-mode-btn:hover { border-color: var(--accent); }
+.signal-mode-btn.active { background: var(--accent); border-color: var(--accent); color: #ffffff; }
+
+.signal-sound-btn { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-body); font-weight: 600; font-size: 14px; color: var(--accent-2); background: var(--accent-soft); border: 1px solid var(--accent); border-radius: 8px; padding: 10px 16px; margin-bottom: 20px; cursor: pointer; }
+.signal-sound-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.signal-sound-btn--klein { font-size: 13px; padding: 6px 12px; margin: 10px 0 0; }
+
+.signal-quiz-bild img { background: #ffffff; border-radius: 8px; padding: 8px; }
+
+.signal-katalog-gruppe { margin-bottom: 44px; }
+.signal-katalog-titel { font-family: var(--font-display); font-weight: 700; font-size: 26px; margin: 0 0 18px; padding-bottom: 8px; border-bottom: 2px solid var(--accent); }
+.signal-katalog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
+.signal-katalog-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; display: flex; flex-direction: column; align-items: flex-start; }
+.signal-katalog-bild { width: 100%; background: #ffffff; border-radius: 8px; padding: 6px; margin-bottom: 10px; display: flex; justify-content: center; }
+.signal-katalog-bild img { max-width: 100%; height: auto; max-height: 130px; object-fit: contain; }
+.signal-katalog-code { font-family: var(--font-mono); font-weight: 700; font-size: 13px; color: var(--accent-2); margin-bottom: 4px; text-transform: uppercase; }
+.signal-katalog-antwort { font-size: 14px; line-height: 1.45; color: var(--text); }
+
 /* ---------------------------- Signale-Lernspiel ---------------------------- */
 
 .signal-diff-grid {
