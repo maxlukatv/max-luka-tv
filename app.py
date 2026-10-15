@@ -715,6 +715,15 @@ def werbevideo_vorschau():
     )
 
 
+@app.route("/hintergrund_vorschau")
+def hintergrund_vorschau():
+    return render_template(
+        "hintergrund_vorschau.html",
+        channel=CHANNEL,
+        nav_items=NAV_ITEMS,
+        channel_avatar=_get_channel_avatar_safe(),
+    )
+
 if __name__ == "__main__":
     # 0.0.0.0 damit cloudflared den lokalen Server erreichen kann
     app.run(host="0.0.0.0", port=5050, debug=True)
