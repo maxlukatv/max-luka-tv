@@ -1,279 +1,335 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Halloween Special</title>
-    <style>
-        :root {
-            --bg-color: #f0f0f0;
-            --text-color: #333;
+  <script>
+    (function () {
+      try {
+        if (localStorage.getItem('mltv-theme') === 'dark') {
+          document.documentElement.setAttribute('data-theme', 'dark');
         }
-
-        body.dark-mode {
-            --bg-color: #0d0d1a;
-            --text-color: #f0f0f0;
-        }
-
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: sans-serif;
-            overflow: hidden;
-            height: 100vh;
-            transition: background-color 0.5s ease;
-        }
-
-        /* Toggle Button für Dark/Light Mode */
-        .theme-toggle {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            z-index: 100;
-            border: none;
-            border-radius: 5px;
-            background-color: #ff7518;
-            color: #fff;
-            font-weight: bold;
-        }
-
-        /* --- KÜRBIS VARIANTEN --- */
-        .pumpkin-container {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 40px;
-        }
-
-        .pumpkin {
-            width: 120px;
-            height: 120px;
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            transition: filter 0.5s ease;
-        }
-
-        body:not(.dark-mode) .pumpkin {
-            filter: brightness(0.3) contrast(1.2);
-        }
-
-        body.dark-mode .pumpkin {
-            filter: drop-shadow(0 0 15px #ff7518) brightness(1.2);
-        }
-
-        /* --- GEIST (Nur im Dark Mode) --- */
-        #ghost {
-            position: absolute;
-            width: 100px;
-            display: none;
-            z-index: 10;
-        }
-
-        body.dark-mode #ghost.active {
-            display: block;
-        }
-
-        /* --- HEXE (Nur im Dark Mode) --- */
-        #witch {
-            position: absolute;
-            width: 150px;
-            display: none;
-            z-index: 20;
-        }
-
-        body.dark-mode #witch.active {
-            display: block;
-        }
-
-        /* --- ATMUNGS- & LUNGEN-EFFEKT MIT NASENBLÄSCHEN --- */
-        .breathing-character-container {
-            position: absolute;
-            bottom: 40px;
-            left: 50px;
-            width: 140px;
-            height: 180px;
-            z-index: 30;
-        }
-
-        /* Die Lunge/der Brustkorb zieht sich zusammen (wird leerer) */
-        @keyframes emptyLungs {
-            0% { transform: scale(1); }
-            40% { transform: scale(0.75); } /* Lunge wird leerer / kleiner */
-            60% { transform: scale(0.75); } /* Luft bleibt kurz draußen */
-            100% { transform: scale(1); }    /* Wieder einatmen */
-        }
-
-        .chest-area {
-            transform-origin: center;
-            animation: emptyLungs 4s ease-in-out infinite;
-        }
-
-        /* Luftbläschen steigen aus der Nase auf */
-        @keyframes riseBubbles {
-            0% {
-                transform: translateY(0) scale(0.4);
-                opacity: 0;
-            }
-            20% {
-                opacity: 0.9;
-            }
-            100% {
-                transform: translateY(-50px) scale(1.1);
-                opacity: 0;
-            }
-        }
-
-        .bubble {
-            position: absolute;
-            background-color: rgba(200, 230, 255, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.9);
-            border-radius: 50%;
-            animation: riseBubbles 2s linear infinite;
-        }
-
-        /* Einzelne Bläschen mit Versatz */
-        .bubble-1 { width: 6px; height: 6px; left: 72px; top: 45px; animation-delay: 0s; }
-        .bubble-2 { width: 9px; height: 9px; left: 76px; top: 43px; animation-delay: 0.6s; }
-        .bubble-3 { width: 5px; height: 5px; left: 70px; top: 48px; animation-delay: 1.2s; }
-
-        /* Keyframe-Animationen für Geist & Hexe */
-        @keyframes moveUp {
-            from { top: 100vh; }
-            to { top: -150px; }
-        }
-
-        @keyframes moveDown {
-            from { top: -150px; }
-            to { top: 100vh; }
-        }
-
-        @keyframes moveLeftToRight {
-            from { left: -200px; }
-            to { left: 100vw; }
-        }
-
-        @keyframes moveRightToLeft {
-            from { left: 100vw; }
-            to { left: -200px; }
-        }
-    </style>
+      } catch (e) {}
+    })();
+  </script>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='img/favicon.svg') }}">
+  <link rel="alternate icon" href="{{ url_for('static', filename='img/favicon.png') }}">
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/apple-touch-icon.png') }}">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ channel.name }}</title>
+  <meta name="description" content="{{ channel.tagline }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
 
-    <button class="theme-toggle" onclick="toggleTheme()">Dark/Light Mode</button>
-
-    <!-- Charakter mit leerer werdender Lunge und Luftbläschen aus der Nase -->
-    <div class="breathing-character-container">
-        <!-- Luftbläschen an der Nasenposition -->
-        <div class="bubble bubble-1"></div>
-        <div class="bubble bubble-2"></div>
-        <div class="bubble bubble-3"></div>
-
-        <!-- SVG-Figur mit animiertem Brustkorb/Lunge -->
-        <svg viewBox="0 0 100 130" width="100%" height="100%">
-            <!-- Kopf -->
-            <circle cx="50" cy="30" r="15" fill="#d1c4e9"/>
-            <!-- Nase -->
-            <path d="M 62 28 Q 68 28 65 31 Z" fill="#b39ddb"/>
-            
-            <!-- Brustkorb / Lunge die sich leert -->
-            <g class="chest-area">
-                <ellipse cx="50" cy="70" rx="22" ry="28" fill="#7986cb"/>
-                <path d="M 40 55 L 50 45 L 60 55" stroke="#3f51b5" stroke-width="3" fill="none"/>
-            </g>
-        </svg>
+  <!-- ============ HEADER ============ -->
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a href="#top" class="logo">
+        {% if channel_avatar %}
+        <img class="logo-avatar" src="{{ channel_avatar }}" alt="{{ channel.name }}">
+        {% else %}
+        <span class="logo-mark">MLTV</span>
+        {% endif %}
+        <span class="logo-text">{{ channel.name }}</span>
+      </a>
+      <div class="header-badges">
+        <div class="status-badge">
+          <span class="status-dot"></span>
+          LIVE
+        </div>
+      </div>
     </div>
+  </header>
 
-    <!-- Kürbisse -->
-    <div class="pumpkin-container">
-        <svg class="pumpkin" viewBox="0 0 100 100">
-            <path d="M50 15 C20 15 5 35 5 60 C5 85 25 95 50 95 C75 95 95 85 95 60 C95 35 80 15 50 15 Z" fill="#ff7518"/>
-            <rect x="46" y="5" width="8" height="15" fill="#2e7d32"/>
-            <polygon points="30,40 20,55 40,55" fill="#000"/>
-            <polygon points="70,40 60,55 80,55" fill="#000"/>
-            <polygon points="50,60 43,68 57,68" fill="#000"/>
-            <path d="M 25 75 Q 50 90 75 75 Q 50 82 25 75 Z" fill="#000"/>
-        </svg>
+  <!-- ============ HELL-/DUNKELMODUS-KETTCHEN ============ -->
+  <button type="button" class="theme-pull" aria-label="Zu Dunkelmodus wechseln">
+    <span class="theme-pull-cord"></span>
+    <span class="theme-pull-knob">☀️</span>
+  </button>
+
+  <!-- ============ SCHNELLZUGRIFF ============ -->
+  <nav class="quicknav" aria-label="Schnellzugriff">
+    <div class="wrap quicknav-inner">
+      {% for item in nav_items %}
+      <a class="quicknav-link" href="{{ item.href }}">{{ item.label }}</a>
+      {% endfor %}
     </div>
+  </nav>
 
-    <!-- Geist -->
-    <img id="ghost" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M20,90 Q20,20 50,20 Q80,20 80,90 Q65,80 50,90 Q35,80 20,90 Z' fill='white' opacity='0.8'/><circle cx='40' cy='40' r='5' fill='black'/><circle cx='60' cy='40' r='5' fill='black'/></svg>" alt="Geist">
+  <!-- ============ WARNSTREIFEN ============ -->
+  <div class="hazard-stripe" aria-hidden="true"></div>
 
-    <!-- Hexe -->
-    <img id="witch" src="" alt="Hexe">
+  <!-- ============ TICKER ============ -->
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track">
+      {% for i in range(2) %}
+      <span class="ticker-item">{{ channel.name }}</span>
+      <span class="ticker-sep">//</span>
+      {% for link in links %}
+      <span class="ticker-item">{{ link.name }}: {{ link.handle }}</span>
+      <span class="ticker-sep">//</span>
+      {% endfor %}
+      {% for video in latest_videos %}
+      <span class="ticker-item">NEUES VIDEO: {{ video.title }}</span>
+      <span class="ticker-sep">//</span>
+      {% endfor %}
+      {% endfor %}
+    </div>
+  </div>
 
-    <script>
-        function toggleTheme() {
-            document.body.classList.toggle('dark-mode');
-        }
+  <!-- ============ HERO ============ -->
+  <main id="top">
+    <section class="hero">
+      <div class="wrap hero-inner">
+        <p class="eyebrow">YouTube-Kanal</p>
+        <h1 class="hero-title">{{ channel.name }}</h1>
+        <p class="hero-tagline">{{ channel.tagline }}</p>
+        <div class="hero-cta">
+          {% if links %}
+          <a href="{{ links[0].url }}" target="_blank" rel="noopener" class="btn btn-primary">
+            {{ links[0].name }} abonnieren
+          </a>
+          {% endif %}
+          <a href="#links" class="btn btn-ghost">Alle Kanäle</a>
+        </div>
+      </div>
+      <div class="hero-avatar-wrap">
+        {% if channel_avatar %}
+        <img class="hero-avatar" src="{{ channel_avatar }}" alt="{{ channel.name }}">
+        {% else %}
+        <div class="hero-frame" aria-hidden="true">
+          <span class="frame-label">YouTube</span>
+        </div>
+        {% endif %}
+      </div>
+    </section>
 
-        function getRandom(min, max) {
-            return Math.random() * (max - min) + min;
-        }
+    <!-- ============ ABONNENTEN-ZIEL ============ -->
+    <section class="section stats" id="stats">
+      <div class="wrap">
+        {% if subscriber_count is not none %}
+        <div class="stat-block">
+          <span class="stat-number">{{ "{:,}".format(subscriber_count).replace(",", ".") }}</span>
+          <span class="stat-label">Abonnenten</span>
+        </div>
+        <div class="stat-progress">
+          <div class="stat-progress-bar" style="width: {{ subscriber_progress_percent }}%;"></div>
+        </div>
+        {% if subscriber_remaining and subscriber_remaining > 0 %}
+        <p class="stat-note">
+          Noch <strong>{{ "{:,}".format(subscriber_remaining).replace(",", ".") }}</strong>
+          Abonnenten bis {{ "{:,}".format(subscriber_goal).replace(",", ".") }}!
+        </p>
+        {% else %}
+        <p class="stat-note">🎉 Ziel von {{ "{:,}".format(subscriber_goal).replace(",", ".") }} Abonnenten erreicht!</p>
+        {% endif %}
+        {% elif videos_error %}
+        <p class="stat-note">{{ videos_error }}</p>
+        {% else %}
+        <p class="stat-note">Die Abonnentenzahl ist auf YouTube derzeit ausgeblendet.</p>
+        {% endif %}
+      </div>
+    </section>
 
-        // --- GEIST LOGIK ---
-        const ghost = document.getElementById('ghost');
+    <!-- ============ ABOUT ============ -->
+    <section class="section about" id="about">
+      <div class="wrap">
+        <p class="eyebrow">Über mich</p>
+        <p class="about-text">{{ channel.bio }}</p>
+      </div>
+    </section>
 
-        function triggerGhost() {
-            if (document.body.classList.contains('dark-mode')) {
-                const duration = getRandom(5, 10);
-                const direction = Math.random() < 0.5 ? 'up' : 'down';
-                const randomX = getRandom(10, 80);
+    <!-- ============ VIDEOS ERROR ============ -->
+    {% if videos_error %}
+    <section class="section">
+      <div class="wrap">
+        <div class="videos-notice">{{ videos_error }}</div>
+      </div>
+    </section>
+    {% endif %}
 
-                ghost.style.left = randomX + 'vw';
-                ghost.style.animation = `${direction === 'up' ? 'moveUp' : 'moveDown'} ${duration}s linear forwards`;
-                ghost.classList.add('active');
+    <!-- ============ NEUESTE VIDEOS (Abfahrtstafel-Stil) ============ -->
+    {% if latest_videos %}
+    <section class="section news" id="latest-videos">
+      <div class="wrap">
+        <p class="eyebrow">Automatisch aktuell</p>
+        <h2 class="section-title">Neueste Videos</h2>
+        <div class="departure-board">
+          {% for video in latest_videos %}
+          <a class="departure-row {% if video.is_new %}departure-row--new{% endif %}" href="{{ video.url }}" target="_blank" rel="noopener">
+            <span class="departure-thumb" style="background-image:url('{{ video.thumbnail }}')"></span>
+            <span class="departure-body">
+              {% if video.is_new %}<span class="new-badge">NEU</span>{% endif %}
+              <span class="departure-title">{{ video.title }}</span>
+            </span>
+            <span class="departure-meta">
+              {{ video.published_at }}
+              <span class="departure-views">{{ "{:,}".format(video.views).replace(",", ".") }} Aufrufe</span>
+            </span>
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+    {% endif %}
 
-                setTimeout(() => {
-                    ghost.classList.remove('active');
-                    ghost.style.animation = '';
-                }, duration * 1000);
-            }
+    <!-- ============ TOP VIDEOS ============ -->
+    {% if top_videos %}
+    <section class="section news" id="top-videos">
+      <div class="wrap">
+        <p class="eyebrow">Meistgesehen</p>
+        <h2 class="section-title">Top Videos</h2>
+        <div class="video-grid">
+          {% for video in top_videos %}
+          <a class="video-card" href="{{ video.url }}" target="_blank" rel="noopener">
+            <span class="video-thumb" style="background-image:url('{{ video.thumbnail }}')">
+              <span class="video-play">▶</span>
+              <span class="video-rank">#{{ loop.index }}</span>
+            </span>
+            <span class="video-body">
+              <span class="video-title">{{ video.title }}</span>
+              <span class="video-meta">{{ "{:,}".format(video.views).replace(",", ".") }} Aufrufe</span>
+            </span>
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+    {% endif %}
 
-            const nextInterval = getRandom(20000, 60000);
-            setTimeout(triggerGhost, nextInterval);
-        }
+    <!-- ============ NEUESTE SHORTS ============ -->
+    {% if latest_shorts %}
+    <section class="section news" id="latest-shorts">
+      <div class="wrap">
+        <p class="eyebrow">Automatisch aktuell</p>
+        <h2 class="section-title">Neueste Shorts</h2>
+        <div class="video-grid video-grid--shorts">
+          {% for video in latest_shorts %}
+          <a class="video-card video-card--short {% if video.is_new %}video-card--new{% endif %}" href="{{ video.url }}" target="_blank" rel="noopener">
+            <span class="video-thumb video-thumb--short" style="background-image:url('{{ video.thumbnail }}')">
+              <span class="video-play">▶</span>
+              {% if video.is_new %}<span class="new-badge">NEU</span>{% endif %}
+            </span>
+            <span class="video-body">
+              <span class="video-title">{{ video.title }}</span>
+              <span class="video-meta">{{ video.published_at }} · {{ "{:,}".format(video.views).replace(",", ".") }} Aufrufe</span>
+            </span>
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+    {% endif %}
 
-        // --- HEXEN LOGIK ---
-        const witch = document.getElementById('witch');
+    <!-- ============ TOP SHORTS ============ -->
+    {% if top_shorts %}
+    <section class="section news" id="top-shorts">
+      <div class="wrap">
+        <p class="eyebrow">Meistgesehen</p>
+        <h2 class="section-title">Top Shorts</h2>
+        <div class="video-grid video-grid--shorts">
+          {% for video in top_shorts %}
+          <a class="video-card video-card--short" href="{{ video.url }}" target="_blank" rel="noopener">
+            <span class="video-thumb video-thumb--short" style="background-image:url('{{ video.thumbnail }}')">
+              <span class="video-play">▶</span>
+              <span class="video-rank">#{{ loop.index }}</span>
+            </span>
+            <span class="video-body">
+              <span class="video-title">{{ video.title }}</span>
+              <span class="video-meta">{{ "{:,}".format(video.views).replace(",", ".") }} Aufrufe</span>
+            </span>
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+    {% endif %}
 
-        function triggerWitch() {
-            if (document.body.classList.contains('dark-mode')) {
-                const duration = getRandom(1, 5);
-                const toLeft = Math.random() < 0.5;
-                const randomY = getRandom(10, 60);
+    <!-- ============ PLAYLISTS ============ -->
+    {% if playlists %}
+    <section class="section news" id="playlists">
+      <div class="wrap">
+        <p class="eyebrow">Sammlungen</p>
+        <h2 class="section-title">Playlists</h2>
+        <div class="video-grid">
+          {% for playlist in playlists %}
+          <a class="video-card" href="{{ playlist.url }}" target="_blank" rel="noopener">
+            <span class="video-thumb" style="background-image:url('{{ playlist.thumbnail }}')">
+              <span class="video-play">▶</span>
+              <span class="video-rank">{{ playlist.item_count }} Videos</span>
+            </span>
+            <span class="video-body">
+              <span class="video-title">{{ playlist.title }}</span>
+            </span>
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+    {% endif %}
 
-                if (toLeft) {
-                    witch.src = 'hexe(nach links).png';
-                    witch.style.animation = `moveRightToLeft ${duration}s linear forwards`;
-                } else {
-                    witch.src = 'hexe(nach rechts).png';
-                    witch.style.animation = `moveLeftToRight ${duration}s linear forwards`;
-                }
+    <!-- ============ EVENTS ============ -->
+    <section class="section news" id="events">
+      <div class="wrap">
+        <p class="eyebrow">Termine</p>
+        <h2 class="section-title">Events</h2>
+        {% if events %}
+        <div class="news-list">
+          {% for event in events %}
+          <article class="news-card">
+            <div class="news-meta">
+              <span class="news-tag">TERMIN</span>
+              <span class="news-date">{{ event.date }}</span>
+            </div>
+            <h3 class="news-title">{{ event.title }}</h3>
+            <p class="news-text">{{ event.description }}</p>
+            {% if event.link %}
+            <a class="btn btn-ghost" href="{{ event.link }}" target="_blank" rel="noopener" style="margin-top: 14px;">Mehr erfahren</a>
+            {% endif %}
+          </article>
+          {% endfor %}
+        </div>
+        {% else %}
+        <div class="videos-notice">Aktuell sind keine Events geplant - schau bald wieder vorbei!</div>
+        {% endif %}
+      </div>
+    </section>
 
-                witch.style.top = randomY + 'vh';
-                witch.classList.add('active');
+    <!-- ============ LINKS ============ -->
+    <section class="section links" id="links">
+      <div class="wrap">
+        <p class="eyebrow">Kanäle</p>
+        <h2 class="section-title">Folge Max-Luka TV</h2>
+        <div class="links-grid">
+          {% for link in links %}
+          <a class="link-card {% if link.featured %}link-card--featured{% endif %}" href="{{ link.url }}" target="_blank" rel="noopener">
+            {% if link.featured %}<span class="link-badge">★ Community-Favorit</span>{% endif %}
+            <span class="link-icon" data-icon="{{ link.icon }}"></span>
+            <span class="link-body">
+              <span class="link-name">{{ link.name }}</span>
+              <span class="link-handle">{{ link.handle }}</span>
+              <span class="link-desc">{{ link.description }}</span>
+            </span>
+            <span class="link-arrow">→</span>
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+  </main>
 
-                setTimeout(() => {
-                    witch.classList.remove('active');
-                    witch.style.animation = '';
-                }, duration * 1000);
-            }
+  <!-- ============ FOOTER ============ -->
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <span>{{ channel.name }} © 2026</span>
+      <span class="footer-sep">·</span>
+      <span>Erstellt mit Python &amp; Flask &amp; AI</span>
+    </div>
+  </footer>
 
-            const nextInterval = getRandom(20000, 60000);
-            setTimeout(triggerWitch, nextInterval);
-        }
-
-        setTimeout(triggerGhost, 5000);
-        setTimeout(triggerWitch, 7000);
-    </script>
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>
