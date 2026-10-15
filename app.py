@@ -705,6 +705,16 @@ def signale_lernen_fragen():
     return jsonify(signale_daten.baue_fragen())
 
 
+@app.route("/werbevideo_vorschau")
+def werbevideo_vorschau():
+    return render_template(
+        "werbevideo.html",
+        channel=CHANNEL,
+        nav_items=NAV_ITEMS,
+        channel_avatar=_get_channel_avatar_safe(),
+    )
+
+
 if __name__ == "__main__":
     # 0.0.0.0 damit cloudflared den lokalen Server erreichen kann
     app.run(host="0.0.0.0", port=5050, debug=True)
