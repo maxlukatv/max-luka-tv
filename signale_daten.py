@@ -201,61 +201,42 @@ SOUND_MAX_ABSPIELEN = 3
 
 
 def baue_fragen():
-    """10 abwechslungsreiche Fragen quer durch alle Kategorien, je 3 Antworten streng aus derselben Kategorie."""
+    """10 zufällige Fragen quer durch alle Kategorien, je 3 Antworten vorrangig aus derselben Kategorie."""
     quiz_pool = [s for s in ALLE_SIGNALE if s["im_quiz"]]
-    
-    # Sorge für einen echten Mix: Gruppiere nach Kategorien und mische die Reihenfolge durch
-    kategorien_gruppen = {}
-    for s in quiz_pool:
-        kategorien_gruppen.setdefault(s["kategorie"], []).append(s)
-    
-    # Wähle abwechselnd Signale aus verschiedenen Kategorien aus, für einen bunten Mix
-    verfuegbare_kategorien = list(kategorien_gruppen.keys())
-    random.shuffle(verfuegbare_kategorien)
-    
-    ausgewaehlt = []
-    while len(ausgewaehlt) < FRAGEN_PRO_RUNDE and verfuegbare_kategorien:
-        for kat in list(verfuegbare_kategorien):
-            if kategorien_gruppen[kat]:
-                # Nimm ein zufälliges Signal aus dieser Kategorie
-                sig = random.choice(kategorien_gruppen[kat])
-                ausgewaehlt.append(sig)
-                kategorien_gruppen[kat].remove(sig) # Doppeltes in kurzer Zeit vermeiden
-                
-                if len(ausgewaehlt) >= FRAGEN_PRO_RUNDE:
-                    break
-            else:
-                verfuegbare_kategorien.remove(kat)
-        random.shuffle(verfuegbare_kategorien)
-
-    # Falls wir weniger als 10 haben, fülle den Rest einfach auf
-    if len(ausgewaehlt) < FRAGEN_PRO_RUNDE:
-        rest_pool = [s for s in quiz_pool if s not in ausgewaehlt]
-        if rest_pool:
-            ausgewaehlt.extend(random.sample(rest_pool, min(FRAGEN_PRO_RUNDE - len(ausgewaehlt), len(rest_pool))))
+    anzahl = min(FRAGEN_PRO_RUNDE, len(quiz_pool))
+    ausgewaehlt = random.sample(quiz_pool, anzahl)
 
     fragen = []
     for item in ausgewaehlt:
         kategorie = item["kategorie"]
+        richtige_antwort = item["antwort"]
         
-        # Falsche Antworten NUR aus derselben Kategorie holen
-        kategorie_antworten = [
+        # 1. Versuche Antworten aus derselben Kategorie zu holen
+        gleiche_kat_antworten = list({
             s["antwort"] for s in quiz_pool 
-            if s["kategorie"] == kategorie and s["antwort"] != item["antwort"]
-        ]
+            if s["kategorie"] == kategorie and s["antwort"] != richtige_antwort
+        })
+        random.shuffle(gleiche_kat_antworten)
         
-        # Falls die Kategorie zu wenig eigene Antworten hat, erlaube den direkten Nachbar-Pool oder Fallback
-        if len(kategorie_antworten) < (ANTWORTEN_PRO_FRAGE - 1):
-            kategorie_antworten = [
+        distraktoren = []
+        benoetigt = ANTWORTEN_PRO_FRAGE - 1 # Normalerweise 2 falsche Antworten
+        
+        # 2. Wenn die Kategorie genug eigene Antworten hat, nimm sie
+        if len(gleiche_kat_antworten) >= benoetigt:
+            distraktoren = gleiche_kat_antworten[:benoetigt]
+        else:
+            # Ansonsten nimm alle die da sind und fülle den Rest sicher aus dem Gesamtpool auf
+            distraktoren = gleiche_kat_antworten.copy()
+            rest_kandidaten = list({
                 s["antwort"] for s in quiz_pool 
-                if s["antwort"] != item["antwort"]
-            ]
+                if s["antwort"] != richtige_antwort and s["antwort"] not in distraktoren
+            })
+            random.shuffle(rest_kandidaten)
+            fehlend = benoetigt - len(distraktoren)
+            distraktoren.extend(rest_kandidaten[:fehlend])
 
-        # Eindeutige Antworten sicherstellen
-        kategorie_antworten = list(set(kategorie_antworten))
-        
-        distraktoren = random.sample(kategorie_antworten, min(ANTWORTEN_PRO_FRAGE - 1, len(kategorie_antworten)))
-        optionen = distraktoren + [item["antwort"]]
+        # 3. Optionen zusammenbauen und mischen
+        optionen = distraktoren + [richtige_antwort]
         random.shuffle(optionen)
         
         fragen.append(
@@ -265,7 +246,7 @@ def baue_fragen():
                 "bild": item["bild"],
                 "sound": item["sound"],
                 "optionen": optionen,
-                "richtig": item["antwort"],
+                "richtig": richtige_antwort,
             }
         )
     return fragen
