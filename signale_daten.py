@@ -201,18 +201,27 @@ SOUND_MAX_ABSPIELEN = 3
 
 
 def baue_fragen():
-    """10 zufällige Fragen aus allen quiz-tauglichen Signalen, je 3 Antworten."""
+    """10 zufällige Fragen aus allen quiz-tauglichen Signalen, je 3 Antworten aus derselben Kategorie."""
     quiz_pool = [s for s in ALLE_SIGNALE if s["im_quiz"]]
     anzahl = min(FRAGEN_PRO_RUNDE, len(quiz_pool))
     ausgewaehlt = random.sample(quiz_pool, anzahl)
-    alle_antworten = list({s["antwort"] for s in quiz_pool})
 
     fragen = []
     for item in ausgewaehlt:
-        kandidaten = [a for a in alle_antworten if a != item["antwort"]]
-        distraktoren = random.sample(kandidaten, min(ANTWORTEN_PRO_FRAGE - 1, len(kandidaten)))
+        kategorie = item["kategorie"]
+        
+        # Falsche Antworten NUR aus derselben Kategorie holen (und nicht die richtige selbst)
+        kategorie_antworten = list({s["antwort"] for s in quiz_pool if s["kategorie"] == kategorie and s["antwort"] != item["antwort"]})
+        
+        # Fallback, falls eine Kategorie weniger als 2 andere Antworten hat: 
+        # Nimm Antworten aus dem Gesamt-Pool (außer der richtigen)
+        if len(kategorie_antworten) < (ANTWORTEN_PRO_FRAGE - 1):
+            kategorie_antworten = list({s["antwort"] for s in quiz_pool if s["antwort"] != item["antwort"]})
+
+        distraktoren = random.sample(kategorie_antworten, min(ANTWORTEN_PRO_FRAGE - 1, len(kategorie_antworten)))
         optionen = distraktoren + [item["antwort"]]
         random.shuffle(optionen)
+        
         fragen.append(
             {
                 "code": item["code"],
@@ -224,7 +233,6 @@ def baue_fragen():
             }
         )
     return fragen
-
 
 def baue_katalog():
     """Alle Signale gruppiert nach Kategorie, zum Nachschauen ohne Quiz."""
