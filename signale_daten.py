@@ -201,23 +201,59 @@ SOUND_MAX_ABSPIELEN = 3
 
 
 def baue_fragen():
-    """10 zufällige Fragen aus allen quiz-tauglichen Signalen, je 3 Antworten aus derselben Kategorie."""
+    """10 abwechslungsreiche Fragen quer durch alle Kategorien, je 3 Antworten streng aus derselben Kategorie."""
     quiz_pool = [s for s in ALLE_SIGNALE if s["im_quiz"]]
-    anzahl = min(FRAGEN_PRO_RUNDE, len(quiz_pool))
-    ausgewaehlt = random.sample(quiz_pool, anzahl)
+    
+    # Sorge für einen echten Mix: Gruppiere nach Kategorien und mische die Reihenfolge durch
+    kategorien_gruppen = {}
+    for s in quiz_pool:
+        kategorien_gruppen.setdefault(s["kategorie"], []).append(s)
+    
+    # Wähle abwechselnd Signale aus verschiedenen Kategorien aus, für einen bunten Mix
+    verfuegbare_kategorien = list(kategorien_gruppen.keys())
+    random.shuffle(verfuegbare_kategorien)
+    
+    ausgewaehlt = []
+    while len(ausgewaehlt) < FRAGEN_PRO_RUNDE and verfuegbare_kategorien:
+        for kat in list(verfuegbare_kategorien):
+            if kategorien_gruppen[kat]:
+                # Nimm ein zufälliges Signal aus dieser Kategorie
+                sig = random.choice(kategorien_gruppen[kat])
+                ausgewaehlt.append(sig)
+                kategorien_gruppen[kat].remove(sig) # Doppeltes in kurzer Zeit vermeiden
+                
+                if len(ausgewaehlt) >= FRAGEN_PRO_RUNDE:
+                    break
+            else:
+                verfuegbare_kategorien.remove(kat)
+        random.shuffle(verfuegbare_kategorien)
+
+    # Falls wir weniger als 10 haben, fülle den Rest einfach auf
+    if len(ausgewaehlt) < FRAGEN_PRO_RUNDE:
+        rest_pool = [s for s in quiz_pool if s not in ausgewaehlt]
+        if rest_pool:
+            ausgewaehlt.extend(random.sample(rest_pool, min(FRAGEN_PRO_RUNDE - len(ausgewaehlt), len(rest_pool))))
 
     fragen = []
     for item in ausgewaehlt:
         kategorie = item["kategorie"]
         
-        # Falsche Antworten NUR aus derselben Kategorie holen (und nicht die richtige selbst)
-        kategorie_antworten = list({s["antwort"] for s in quiz_pool if s["kategorie"] == kategorie and s["antwort"] != item["antwort"]})
+        # Falsche Antworten NUR aus derselben Kategorie holen
+        kategorie_antworten = [
+            s["antwort"] for s in quiz_pool 
+            if s["kategorie"] == kategorie and s["antwort"] != item["antwort"]
+        ]
         
-        # Fallback, falls eine Kategorie weniger als 2 andere Antworten hat: 
-        # Nimm Antworten aus dem Gesamt-Pool (außer der richtigen)
+        # Falls die Kategorie zu wenig eigene Antworten hat, erlaube den direkten Nachbar-Pool oder Fallback
         if len(kategorie_antworten) < (ANTWORTEN_PRO_FRAGE - 1):
-            kategorie_antworten = list({s["antwort"] for s in quiz_pool if s["antwort"] != item["antwort"]})
+            kategorie_antworten = [
+                s["antwort"] for s in quiz_pool 
+                if s["antwort"] != item["antwort"]
+            ]
 
+        # Eindeutige Antworten sicherstellen
+        kategorie_antworten = list(set(kategorie_antworten))
+        
         distraktoren = random.sample(kategorie_antworten, min(ANTWORTEN_PRO_FRAGE - 1, len(kategorie_antworten)))
         optionen = distraktoren + [item["antwort"]]
         random.shuffle(optionen)
