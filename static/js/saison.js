@@ -34,11 +34,17 @@ document.addEventListener("DOMContentLoaded", function() {
     // --- MODI EFFEKTE ---
     if (aktuellerModus === 'ostern') {
         layer.innerHTML = `
-            <div style="position:fixed; bottom:0; width:100%; height:40px; background: #2e8b57; border-top: 4px solid #228b22; z-index:998;"></div>
-            <div class="hase">🐰</div>
-            <div class="osterei" style="left: 15%;">🥚</div>
-            <div class="osterei" style="left: 45%; bottom: 5px;">🎨</div>
-            <div class="osterei" style="left: 75%;">🥚</div>
+            <!-- Grüner Grasboden als wiederholender Balken unten -->
+            <div style="position:fixed; bottom:0; left:0; width:100%; height:40px; background: url('/static/img/grassboden.png') repeat-x bottom; background-size: auto 40px; z-index:998; pointer-events:none;"></div>
+            
+            <!-- Osterei Links -->
+            <img src="/static/img/Osterei1.png" alt="Osterei" style="position:fixed; bottom:15px; left:20px; width:110px; height:auto; z-index:998; pointer-events:none;">
+            
+            <!-- Osterkorb Rechts -->
+            <img src="/static/img/Osterkorb.png" alt="Osterkorb" style="position:fixed; bottom:15px; right:150px; width:200px; height:auto; z-index:998; pointer-events:none;">
+            
+            <!-- Osterei Ganz Rechts -->
+            <img src="/static/img/Osterei2.png" alt="Osterei" style="position:fixed; bottom:15px; right:20px; width:110px; height:auto; z-index:998; pointer-events:none;">
         `;
     } 
     else if (aktuellerModus === 'halloween') {
