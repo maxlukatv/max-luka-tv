@@ -201,7 +201,7 @@ SOUND_MAX_ABSPIELEN = 3
 
 
 def baue_fragen():
-    """10 zufällige Fragen quer durch alle Kategorien, je 3 Antworten vorrangig aus derselben Kategorie."""
+    """10 zufällige Fragen aus allen quiz-tauglichen Signalen, je 3 Antworten aus derselben Kategorie."""
     quiz_pool = [s for s in ALLE_SIGNALE if s["im_quiz"]]
     anzahl = min(FRAGEN_PRO_RUNDE, len(quiz_pool))
     ausgewaehlt = random.sample(quiz_pool, anzahl)
@@ -209,34 +209,17 @@ def baue_fragen():
     fragen = []
     for item in ausgewaehlt:
         kategorie = item["kategorie"]
-        richtige_antwort = item["antwort"]
         
-        # 1. Versuche Antworten aus derselben Kategorie zu holen
-        gleiche_kat_antworten = list({
-            s["antwort"] for s in quiz_pool 
-            if s["kategorie"] == kategorie and s["antwort"] != richtige_antwort
-        })
-        random.shuffle(gleiche_kat_antworten)
+        # Falsche Antworten NUR aus derselben Kategorie holen (und nicht die richtige selbst)
+        kategorie_antworten = list({s["antwort"] for s in quiz_pool if s["kategorie"] == kategorie and s["antwort"] != item["antwort"]})
         
-        distraktoren = []
-        benoetigt = ANTWORTEN_PRO_FRAGE - 1 # Normalerweise 2 falsche Antworten
-        
-        # 2. Wenn die Kategorie genug eigene Antworten hat, nimm sie
-        if len(gleiche_kat_antworten) >= benoetigt:
-            distraktoren = gleiche_kat_antworten[:benoetigt]
-        else:
-            # Ansonsten nimm alle die da sind und fülle den Rest sicher aus dem Gesamtpool auf
-            distraktoren = gleiche_kat_antworten.copy()
-            rest_kandidaten = list({
-                s["antwort"] for s in quiz_pool 
-                if s["antwort"] != richtige_antwort and s["antwort"] not in distraktoren
-            })
-            random.shuffle(rest_kandidaten)
-            fehlend = benoetigt - len(distraktoren)
-            distraktoren.extend(rest_kandidaten[:fehlend])
+        # Fallback, falls eine Kategorie weniger als 2 andere Antworten hat: 
+        # Nimm Antworten aus dem Gesamt-Pool (außer der richtigen)
+        if len(kategorie_antworten) < (ANTWORTEN_PRO_FRAGE - 1):
+            kategorie_antworten = list({s["antwort"] for s in quiz_pool if s["antwort"] != item["antwort"]})
 
-        # 3. Optionen zusammenbauen und mischen
-        optionen = distraktoren + [richtige_antwort]
+        distraktoren = random.sample(kategorie_antworten, min(ANTWORTEN_PRO_FRAGE - 1, len(kategorie_antworten)))
+        optionen = distraktoren + [item["antwort"]]
         random.shuffle(optionen)
         
         fragen.append(
@@ -246,7 +229,7 @@ def baue_fragen():
                 "bild": item["bild"],
                 "sound": item["sound"],
                 "optionen": optionen,
-                "richtig": richtige_antwort,
+                "richtig": item["antwort"],
             }
         )
     return fragen
