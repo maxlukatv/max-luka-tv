@@ -1,0 +1,9 @@
+tunnel: cdedbaa8-8819-4d6d-978b-43531859718d
+credentials-file: C:\Users\maxlu\.cloudflared\cdedbaa8-8819-4d6d-978b-43531859718d.json
+
+ingress:
+  - hostname: max-lukatv.com
+    service: http://localhost:5050
+  - hostname: www.max-lukatv.com
+    service: http://localhost:5050
+  - service: http_status:404
