@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Halloween Special</title>
+    <style>
+        :root {
+            --bg-color: #f0f0f0;
+            --text-color: #333;
+        }
+
+        body.dark-mode {
+            --bg-color: #0d0d1a;
+            --text-color: #f0f0f0;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: sans-serif;
+            overflow: hidden;
+            height: 100vh;
+            transition: background-color 0.5s ease;
+        }
+
+        /* Toggle Button für Dark/Light Mode */
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            z-index: 100;
+            border: none;
+            border-radius: 5px;
+            background-color: #ff7518;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        /* --- KÜRBIS VARIANTEN --- */
+        .pumpkin-container {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 40px;
+        }
+
+        .pumpkin {
+            width: 120px;
+            height: 120px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            transition: filter 0.5s ease;
+        }
+
+        body:not(.dark-mode) .pumpkin {
+            filter: brightness(0.3) contrast(1.2);
+        }
+
+        body.dark-mode .pumpkin {
+            filter: drop-shadow(0 0 15px #ff7518) brightness(1.2);
+        }
+
+        /* --- GEIST (Nur im Dark Mode) --- */
+        #ghost {
+            position: absolute;
+            width: 100px;
+            display: none;
+            z-index: 10;
+        }
+
+        body.dark-mode #ghost.active {
+            display: block;
+        }
+
+        /* --- HEXE (Nur im Dark Mode) --- */
+        #witch {
+            position: absolute;
+            width: 150px;
+            display: none;
+            z-index: 20;
+        }
+
+        body.dark-mode #witch.active {
+            display: block;
+        }
+
+        /* --- ATMUNGS- & LUNGEN-EFFEKT MIT NASENBLÄSCHEN --- */
+        .breathing-character-container {
+            position: absolute;
+            bottom: 40px;
+            left: 50px;
+            width: 140px;
+            height: 180px;
+            z-index: 30;
+        }
+
+        @keyframes emptyLungs {
+            0% { transform: scale(1); }
+            40% { transform: scale(0.75); }
+            60% { transform: scale(0.75); }
+            100% { transform: scale(1); }
+        }
+
+        .chest-area {
+            transform-origin: center;
+            animation: emptyLungs 4s ease-in-out infinite;
+        }
+
+        @keyframes riseBubbles {
+            0% {
+                transform: translateY(0) scale(0.4);
+                opacity: 0;
+            }
+            20% {
+                opacity: 0.9;
+            }
+            100% {
+                transform: translateY(-50px) scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        .bubble {
+            position: absolute;
+            background-color: rgba(200, 230, 255, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            animation: riseBubbles 2s linear infinite;
+        }
+
+        .bubble-1 { width: 6px; height: 6px; left: 72px; top: 45px; animation-delay: 0s; }
+        .bubble-2 { width: 9px; height: 9px; left: 76px; top: 43px; animation-delay: 0.6s; }
+        .bubble-3 { width: 5px; height: 5px; left: 70px; top: 48px; animation-delay: 1.2s; }
+
+        @keyframes moveUp {
+            from { top: 100vh; }
+            to { top: -150px; }
+        }
+
+        @keyframes moveDown {
+            from { top: -150px; }
+            to { top: 100vh; }
+        }
+
+        @keyframes moveLeftToRight {
+            from { left: -200px; }
+            to { left: 100vw; }
+        }
+
+        @keyframes moveRightToLeft {
+            from { left: 100vw; }
+            to { left: -200px; }
+        }
+    </style>
+</head>
+<body>
+
+    <button class="theme-toggle" onclick="toggleTheme()">Dark/Light Mode</button>
+
+    <div class="breathing-character-container">
+        <div class="bubble bubble-1"></div>
+        <div class="bubble bubble-2"></div>
+        <div class="bubble bubble-3"></div>
+
+        <svg viewBox="0 0 100 130" width="100%" height="100%">
+            <circle cx="50" cy="30" r="15" fill="#d1c4e9"/>
+            <path d="M 62 28 Q 68 28 65 31 Z" fill="#b39ddb"/>
+            
+            <g class="chest-area">
+                <ellipse cx="50" cy="70" rx="22" ry="28" fill="#7986cb"/>
+                <path d="M 40 55 L 50 45 L 60 55" stroke="#3f51b5" stroke-width="3" fill="none"/>
+            </g>
+        </svg>
+    </div>
+
+    <div class="pumpkin-container">
+        <svg class="pumpkin" viewBox="0 0 100 100">
+            <path d="M50 15 C20 15 5 35 5 60 C5 85 25 95 50 95 C75 95 95 85 95 60 C95 35 80 15 50 15 Z" fill="#ff7518"/>
+            <rect x="46" y="5" width="8" height="15" fill="#2e7d32"/>
+            <polygon points="30,40 20,55 40,55" fill="#000"/>
+            <polygon points="70,40 60,55 80,55" fill="#000"/>
+            <polygon points="50,60 43,68 57,68" fill="#000"/>
+            <path d="M 25 75 Q 50 90 75 75 Q 50 82 25 75 Z" fill="#000"/>
+        </svg>
+    </div>
+
+    <img id="ghost" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M20,90 Q20,20 50,20 Q80,20 80,90 Q65,80 50,90 Q35,80 20,90 Z' fill='white' opacity='0.8'/><circle cx='40' cy='40' r='5' fill='black'/><circle cx='60' cy='40' r='5' fill='black'/></svg>" alt="Geist">
+
+    <!-- Flask URL-Verknüpfung für Bilder im static-Ordner -->
+    <img id="witch" data-left-src="{{ url_for('static', filename='hexe(nach links).png') }}" data-right-src="{{ url_for('static', filename='hexe(nach rechts).png') }}" alt="Hexe">
+
+    <!-- Externe JS-Datei einbinden -->
+    <script src="{{ url_for('static', filename='halloween.js') }}"></script>
+</body>
+</html>
