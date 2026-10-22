@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Datenschutzerklärung</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <main style="max-width: 800px; margin: 40px auto; padding: 20px;">
+        <h1>Datenschutzerklärung</h1>
+
+        <h2>1. Allgemeine Hinweise</h2>
+        <p>Der Schutz deiner persönlichen Daten ist mir wichtig. Diese Website wird rein privat betrieben. Personenbezogene Daten werden nur im technisch notwendigen Umfang erhoben.</p>
+
+        <h2>2. Verantwortlicher für die Datenverarbeitung</h2>
+        <p>
+            Max-Luka Schulze<br>
+            E-Mail: schieneundweiche9@gmail.com
+        </p>
+
+        <h2>3. Datenerfassung auf dieser Website (Server-Logfiles)</h2>
+        <p>Beim Aufrufen dieser Website speichert der Webserver automatisch Informationen in sogenannten Server-Logfiles. Dazu gehören unter anderem:</p>
+        <ul>
+            <li>Verwendeter Webbrowser und Betriebssystem</li>
+            <li>Uhrzeit der Serveranfrage</li>
+            <li>IP-Adresse des zugreifenden Rechners</li>
+        </ul>
+        <p>Diese Daten dienen lediglich der technischen Funktion und Sicherheit der Website und werden nicht mit anderen Datenquellen zusammengeführt.</p>
+
+        <h2>4. Kontakt per E-Mail</h2>
+        <p>Wenn du mich per E-Mail kontaktierst, werden deine übermittelten Daten ausschließlich zur Bearbeitung der Anfrage verwendet und nicht an Dritte weitergegeben.</p>
+
+        <p style="margin-top: 30px;">
+            <a href="{{ url_for('home') }}">Zurück zur Startseite</a>
+        </p>
+    </main>
+</body>
+</html>
