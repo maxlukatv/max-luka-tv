@@ -70,18 +70,10 @@ LINKS = [
 
 # Events. Leer lassen, wenn gerade nichts geplant ist - die Seite zeigt dann
 # automatisch einen freundlichen "aktuell keine Events"-Hinweis an.
-# Beispiel für einen Eintrag:
-# {
-#     "date": "15.09.2026",
-#     "title": "Livestream: Fragen & Antworten",
-#     "description": "Ich beantworte eure Fragen live auf YouTube.",
-#     "link": "https://www.youtube.com/@max-lukatv",
-# },
 EVENTS = []
 
 # Manuelle Sonder-Ankündigungen (z.B. für Dinge, die nichts mit einem
-# einzelnen Video zu tun haben). Neuester Eintrag zuerst. Kann leer bleiben -
-# die News-Seite füllt sich automatisch mit deinen neuesten Videos/Shorts.
+# einzelnen Video zu tun haben). Neuester Eintrag zuerst.
 NEWS_ITEMS = [
     {
         "date": "10.08.2026",
@@ -112,11 +104,6 @@ def _parse_de_date(date_str):
 
 
 def get_news_items():
-    """
-    Baut die vollständige News-Liste zusammen: automatisch generierte
-    Einträge aus den neuesten Videos/Shorts + deine manuellen
-    Sonder-Ankündigungen, neuester Eintrag zuerst.
-    """
     auto_items = []
     try:
         for video in get_latest_videos():
@@ -149,12 +136,10 @@ def get_news_items():
 # Ziel-Marke für die Abonnenten-Fortschrittsanzeige
 SUBSCRIBER_GOAL = 5000
 
-# Link zu deinem Google Formular für Video-Einsendungen. Trage hier den
-# Link ein, sobald du das Formular erstellt hast (Anleitung dazu hat dir
-# Claude im Chat gegeben). Bis dahin zeigt der Button einen Hinweis an.
+# Link zu deinem Google Formular für Video-Einsendungen.
 EINSENDUNG_FORM_URL = "https://forms.gle/Y6D38VwWpqJV5RW97"
 
-# Schnellzugriff-Navigation (erscheint als Buttonleiste auf jeder Seite)
+# Schnellzugriff-Navigation oben (OHNE Impressum und Datenschutz)
 NAV_ITEMS = [
     {"label": "Videos", "href": "/#latest-videos"},
     {"label": "Shorts", "href": "/#latest-shorts"},
@@ -165,8 +150,6 @@ NAV_ITEMS = [
     {"label": "Schiene & Weiche", "href": "/schiene_und_weiche"},
     {"label": "Signale lernen", "href": "/signale_lernen"},
     {"label": "Kanäle", "href": "/#links"},
-    {"label": "Impressum", "href": "/impressum"},
-    {"label": "Datenschutz", "href": "/datenschutz"},
 ]
 
 # ---------------------------------------------------------------------------
@@ -181,8 +164,6 @@ SCHIENE_UND_WEICHE = {
         "und Bahn genauso lieben wie ich. Hier tauschen wir uns aus, teilen "
         "Aufnahmen und bleiben gemeinsam auf dem Laufenden."
     ),
-    # Aktuelle Mitgliederzahl - bitte von Zeit zu Zeit von Hand aktualisieren,
-    # da WhatsApp keine automatische Abfrage der Mitgliederzahl erlaubt.
     "member_count": 30,
     "whatsapp_link": "https://chat.whatsapp.com/JeiNjBWYGNe3rXNjxwJ2hA?s=cl&p=a&ilr=2",
     "instagram_link": "https://www.instagram.com/schiene_und_weiche/",
@@ -190,7 +171,6 @@ SCHIENE_UND_WEICHE = {
     "contact_email": "schieneundweiche9@gmail.com",
 }
 
-# Was die Community bietet
 SCHIENE_ANGEBOTE = [
     {
         "title": "Chatten & Austauschen",
@@ -214,7 +194,6 @@ SCHIENE_ANGEBOTE = [
     },
 ]
 
-# Admin-Team, in der Reihenfolge, wie sie angezeigt werden sollen
 SCHIENE_ADMINS = [
     {"name": "Max-Luka TV", "role": "Owner"},
     {"name": "Louis", "role": "Admin - Management Leiter"},
@@ -222,7 +201,6 @@ SCHIENE_ADMINS = [
     {"name": "‹Ul®|CH›", "role": "General Admin"},
 ]
 
-# Community-Regeln - werden auf der Seite eingeklappt angezeigt
 SCHIENE_REGELN = [
     {
         "title": "Respekt und Höflichkeit",
@@ -283,32 +261,17 @@ SCHIENE_STRAFEN_HINWEIS = (
     "Zeit folgt der Ausschluss."
 )
 
-# Wie viele Videos/Shorts/Playlists jeweils angezeigt werden
 LATEST_VIDEOS_COUNT = 5
 TOP_VIDEOS_COUNT = 5
 LATEST_SHORTS_COUNT = 8
 TOP_SHORTS_COUNT = 8
 PLAYLISTS_COUNT = 6
-
-# Videos bis zu dieser Länge (in Sekunden) gelten als "Short". YouTube selbst
-# erlaubt Shorts bis zu 3 Minuten (180 Sekunden) - die API liefert kein
-# direktes "ist Short"-Flag, das ist also eine Näherung anhand der Länge.
 SHORT_MAX_SECONDS = 180
-
-# Wie viele "Seiten" à 50 Videos maximal durchsucht werden, um die
-# Top-Listen zu berechnen (YouTube liefert max. 50 Videos pro Anfrage,
-# hier wird so oft "nachgeblättert", bis entweder der ganze Kanal erfasst
-# ist oder dieses Limit erreicht wird). 20 Seiten = bis zu 1000 Videos -
-# für die allermeisten Kanäle mehr als genug, um wirklich ALLE Videos für
-# die Top-Listen zu berücksichtigen, nicht nur die letzten 50 Uploads.
 MAX_PAGES_TO_SCAN = 20
-
-# Wie lange Ergebnisse zwischengespeichert werden (Sekunden), damit nicht bei
-# jedem Seitenaufruf neu bei YouTube abgefragt wird (spart API-Kontingent)
-CACHE_SECONDS = 600  # 10 Minuten
+CACHE_SECONDS = 600
 
 # ---------------------------------------------------------------------------
-# YouTube-Anbindung (ab hier musst du normalerweise nichts mehr ändern)
+# YouTube-Anbindung
 # ---------------------------------------------------------------------------
 
 _cache = {
@@ -326,7 +289,6 @@ def _api_key_configured():
 
 
 def _parse_iso8601_duration(duration):
-    """Wandelt z.B. 'PT4M13S' oder 'PT45S' in Sekunden um."""
     match = re.match(
         r"^PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?$", duration or ""
     )
@@ -337,8 +299,6 @@ def _parse_iso8601_duration(duration):
 
 
 def _get_channel_info():
-    """Kanal-Stammdaten: Profilbild, Titel, Abonnentenzahl, Uploads-Playlist-ID.
-    Wird gecached, damit nicht bei jedem Seitenaufruf neu abgefragt wird."""
     now = time.time()
     if _cache["channel_info"] is not None and (now - _cache["channel_info_fetched_at"]) < CACHE_SECONDS:
         return _cache["channel_info"]
@@ -389,17 +349,12 @@ def _get_uploads_playlist_id():
 
 
 def _fetch_recent_videos_with_stats():
-    """Holt ALLE Uploads (bis MAX_PAGES_TO_SCAN Seiten) inkl. Aufrufzahlen &
-    Länge, gecached für CACHE_SECONDS. Blättert dafür durch die komplette
-    Upload-Playlist, damit die Top-Listen wirklich die meistgesehenen
-    Videos des ganzen Kanals zeigen - nicht nur unter den letzten Uploads."""
     now = time.time()
     if _cache["videos"] is not None and (now - _cache["videos_fetched_at"]) < CACHE_SECONDS:
         return _cache["videos"]
 
     playlist_id = _get_uploads_playlist_id()
 
-    # Schritt 1: alle Video-IDs einsammeln (mehrere Seiten à 50)
     video_ids = []
     page_token = None
     for _ in range(MAX_PAGES_TO_SCAN):
@@ -431,10 +386,8 @@ def _fetch_recent_videos_with_stats():
         _cache["videos_fetched_at"] = now
         return []
 
-    # Reihenfolge der Uploads merken (playlistItems liefert neueste zuerst)
     order = {vid: i for i, vid in enumerate(video_ids)}
 
-    # Schritt 2: Details/Statistiken in 50er-Blöcken abrufen (API-Limit)
     videos = []
     for batch_start in range(0, len(video_ids), 50):
         batch_ids = video_ids[batch_start : batch_start + 50]
@@ -558,9 +511,6 @@ def get_playlists():
 
 
 def _get_channel_avatar_safe():
-    """Holt das Profilbild für den Header/Unterseiten, ohne bei Fehlern
-    die ganze Seite zum Absturz zu bringen (z.B. wenn YouTube gerade nicht
-    erreichbar ist oder kein API-Key eingetragen wurde)."""
     if not _api_key_configured():
         return None
     try:
@@ -572,8 +522,6 @@ def _get_channel_avatar_safe():
 
 @app.route("/ping")
 def ping():
-    # Leichter Endpunkt für kostenlose Wach-halte-Dienste (z.B. UptimeRobot),
-    # damit die Seite bei Render nicht einschläft - ruft KEINE YouTube-API auf.
     return "OK", 200
 
 
@@ -707,7 +655,7 @@ def signale_lernen_fragen():
     return jsonify(signale_daten.baue_fragen())
 
 
-# --- Neue Routen für Impressum & Datenschutz ---
+# --- Routen für Impressum & Datenschutz (für den Footer) ---
 
 @app.route("/impressum")
 def impressum():
@@ -730,5 +678,4 @@ def datenschutz():
 
 
 if __name__ == "__main__":
-    # 0.0.0.0 damit cloudflared den lokalen Server erreichen kann
     app.run(host="0.0.0.0", port=5050, debug=True)
