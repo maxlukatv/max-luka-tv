@@ -165,6 +165,8 @@ NAV_ITEMS = [
     {"label": "Schiene & Weiche", "href": "/schiene_und_weiche"},
     {"label": "Signale lernen", "href": "/signale_lernen"},
     {"label": "Kanäle", "href": "/#links"},
+    {"label": "Impressum", "href": "/impressum"},
+    {"label": "Datenschutz", "href": "/datenschutz"},
 ]
 
 # ---------------------------------------------------------------------------
@@ -703,6 +705,28 @@ def signale_lernen():
 @app.route("/signale_lernen/fragen")
 def signale_lernen_fragen():
     return jsonify(signale_daten.baue_fragen())
+
+
+# --- Neue Routen für Impressum & Datenschutz ---
+
+@app.route("/impressum")
+def impressum():
+    return render_template(
+        "impressum.html",
+        channel=CHANNEL,
+        nav_items=NAV_ITEMS,
+        channel_avatar=_get_channel_avatar_safe(),
+    )
+
+
+@app.route("/datenschutz")
+def datenschutz():
+    return render_template(
+        "datenschutz.html",
+        channel=CHANNEL,
+        nav_items=NAV_ITEMS,
+        channel_avatar=_get_channel_avatar_safe(),
+    )
 
 
 if __name__ == "__main__":
