@@ -1517,3 +1517,32 @@ a {
 .footer-sep {
   opacity: 0.5;
 }
+
+/* Animation für den auffällig blinkenden Event-Button */
+@keyframes eventPulse {
+  0% {
+    background-color: var(--accent, #e50914);
+    color: #ffffff;
+    box-shadow: 0 0 0 0 rgba(229, 9, 20, 0.7);
+    transform: scale(1);
+  }
+  50% {
+    background-color: #ff3b30;
+    color: #ffffff;
+    box-shadow: 0 0 12px 6px rgba(255, 59, 48, 0.4);
+    transform: scale(1.05);
+  }
+  100% {
+    background-color: var(--accent, #e50914);
+    color: #ffffff;
+    box-shadow: 0 0 0 0 rgba(229, 9, 20, 0);
+    transform: scale(1);
+  }
+}
+
+.quicknav-link--event-pulse {
+  animation: eventPulse 1.8s infinite ease-in-out;
+  font-weight: 700 !important;
+  border-radius: 6px;
+  padding: 4px 12px !important;
+}
