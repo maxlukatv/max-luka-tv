@@ -93,9 +93,14 @@
               <h3 class="news-title" style="margin-top: 8px;">{{ item.title }}</h3>
               <p class="news-text">{{ item.description }}</p>
               
-              {% if item.link %}
+              <!-- Bedingung: Button nur zeigen, wenn das Datum erreicht ist -->
+              {% if item.link and item.is_available %}
               <div style="margin-top: 16px;">
                 <a href="{{ item.link }}" target="_blank" rel="noopener" class="btn btn-primary">Video auf YouTube ansehen →</a>
+              </div>
+              {% else %}
+              <div style="margin-top: 16px;">
+                <span style="font-family: var(--font-mono); font-size: 13px; color: var(--steel);">⏰ Premiere am {{ item.date }} auf YouTube</span>
               </div>
               {% endif %}
             </div>
