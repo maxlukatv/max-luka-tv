@@ -64,62 +64,62 @@ LINKS = [
     },
 ]
 
-# Norddeutschland Tour 2026 (02.11.2026 - 09.11.2026) mit deinen YouTube-Links
+# Norddeutschland Tour 2026 (02.11.2026 - 09.11.2026) mit angepassten Dateinamen
 EVENTS = [
     {
         "date": "02.11.2026",
-        "title": "Norddeutschland Tour #1: Westerland (Sylt) & Niebüll",
-        "description": "Tag 1 der großen Norddeutschland Tour 2026! Großdieselloks, Autozüge und Marschbahn pur.",
-        "banner": "img/tour/Tag 1.png",
+        "title": "Norddeutschland Tour #1 (Teil 1): Westerland (Sylt) & Niebüll",
+        "description": "Tag 1 (Teil 1) der großen Norddeutschland Tour 2026! Großdieselloks, Autozüge und Marschbahn pur.",
+        "banner": "img/tour/Tag_1_Teil_1.png",
         "link": "https://youtu.be/dojOztatxRI",
     },
     {
         "date": "02.11.2026",
         "title": "Norddeutschland Tour #1 (Teil 2): Niebüll & Marschbahn",
-        "description": "Der zweite Teil von Tag 1 unserer Tour im hohen Norden.",
-        "banner": "img/tour/Tag 1.png",
+        "description": "Tag 1 (Teil 2) unserer Tour im hohen Norden.",
+        "banner": "img/tour/Tag_1_Teil_2.png",
         "link": "https://youtu.be/5QZgdjJijQw",
     },
     {
         "date": "03.11.2026",
         "title": "Norddeutschland Tour #2: Husum / Heide",
         "description": "Tag 2 unserer Tour an der Küste: Vorbeifahrten und Impressionen aus Husum und Heide.",
-        "banner": "img/tour/Tag 2.png",
+        "banner": "img/tour/Tag_2.png",
         "link": "https://youtu.be/GnNyrgr-ZDk",
     },
     {
         "date": "04.11.2026",
         "title": "Norddeutschland Tour #3: Flensburg / Neumünster",
         "description": "Tag 3: Grenzüberschreitender Verkehr, DSB-Gumminasen und Nahverkehr in Flensburg & Neumünster.",
-        "banner": "img/tour/Tag 3.png",
+        "banner": "img/tour/Tag_3.png",
         "link": "https://youtu.be/hOGc-FQx4Tc",
     },
     {
         "date": "05.11.2026",
         "title": "Norddeutschland Tour #4: Kiel Hbf",
         "description": "Tag 4: Der Hauptbahnhof Kiel im Fokus mit bunten Triebzügen und viel Betriebsgeschehen.",
-        "banner": "img/tour/Tag 4.png",
+        "banner": "img/tour/Tag_4.png",
         "link": "https://youtu.be/WlWrUL_uChk",
     },
     {
         "date": "06.11.2026",
         "title": "Norddeutschland Tour #5: Hamburg",
         "description": "Tag 5: Die Eisenbahn-Metropole Hamburg! Fernverkehr, Metronom und RDC-Züge.",
-        "banner": "img/tour/Tag 5.png",
+        "banner": "img/tour/Tag_5.png",
         "link": "https://youtu.be/m0UgPPTDHgo",
     },
     {
         "date": "07.11.2026",
         "title": "Norddeutschland Tour #6: Lübeck",
         "description": "Tag 6: Zugverkehr rund um die Hansestadt Lübeck.",
-        "banner": "img/tour/Tag 6.png",
+        "banner": "img/tour/Tag_6.png",
         "link": "https://youtu.be/KIRakj0R7sM",
     },
     {
         "date": "08.11.2026",
         "title": "Norddeutschland Tour #7: Bergen (Rügen)",
         "description": "Tag 7: Ab auf die Insel Rügen! Urlaubsverkehr, ICs und Regionalbahnen in Bergen.",
-        "banner": "img/tour/Tag 7.png",
+        "banner": "img/tour/Tag_7.png",
         "link": "https://youtu.be/B9NXZI-lpRY",
     },
 ]
@@ -708,6 +708,8 @@ def impressum():
 def datenschutz():
     return render_template(
         "datenschutz.html",
+        channel=CHANNEL,
+        nav_items=NAV_INSERT_DATENSCHUTZ = None, # (normaler Pfad bleibt)
         channel=CHANNEL,
         nav_items=NAV_ITEMS,
         channel_avatar=_get_channel_avatar_safe(),
