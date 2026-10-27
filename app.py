@@ -15,13 +15,9 @@ app = Flask(__name__)
 # ---------------------------------------------------------------------------
 
 # Deine YouTube-Kanal-ID (für @max-lukatv bereits eingetragen).
-# Falls du sie für einen anderen Kanal brauchst: Kanal öffnen -> Rechtsklick
-# -> "Seitenquelltext anzeigen" -> nach "channelId" suchen.
 CHANNEL_ID = "UCsPV0AoF_XE0paQPl85l8Bg"
 
-# Deinen kostenlosen YouTube-API-Key hier eintragen (siehe README, Abschnitt
-# "YouTube API-Key einrichten"). Alternativ als Umgebungsvariable setzen:
-# Windows PowerShell:  $env:YOUTUBE_API_KEY = "dein-key"
+# Deinen kostenlosen YouTube-API-Key hier eintragen
 YOUTUBE_API_KEY = os.environ.get("YOUTUBE_API_KEY", "AIzaSyDEe8XyC8sSW23MJIWOiQnC3I7GsA-FKmo")
 
 CHANNEL = {
@@ -68,68 +64,67 @@ LINKS = [
     },
 ]
 
-# Norddeutschland Tour 2026 (02.11.2026 - 09.11.2026)
+# Norddeutschland Tour 2026 (02.11.2026 - 09.11.2026) mit deinen YouTube-Links
 EVENTS = [
     {
         "date": "02.11.2026",
         "title": "Norddeutschland Tour #1: Westerland (Sylt) & Niebüll",
         "description": "Tag 1 der großen Norddeutschland Tour 2026! Großdieselloks, Autozüge und Marschbahn pur.",
         "banner": "img/tour/Tag 1.png",
-        "link": "https://www.youtube.com/@max-lukatv",
+        "link": "https://youtu.be/dojOztatxRI",
+    },
+    {
+        "date": "02.11.2026",
+        "title": "Norddeutschland Tour #1 (Teil 2): Niebüll & Marschbahn",
+        "description": "Der zweite Teil von Tag 1 unserer Tour im hohen Norden.",
+        "banner": "img/tour/Tag 1.png",
+        "link": "https://youtu.be/5QZgdjJijQw",
     },
     {
         "date": "03.11.2026",
         "title": "Norddeutschland Tour #2: Husum / Heide",
         "description": "Tag 2 unserer Tour an der Küste: Vorbeifahrten und Impressionen aus Husum und Heide.",
         "banner": "img/tour/Tag 2.png",
-        "link": "https://www.youtube.com/@max-lukatv",
+        "link": "https://youtu.be/GnNyrgr-ZDk",
     },
     {
         "date": "04.11.2026",
         "title": "Norddeutschland Tour #3: Flensburg / Neumünster",
         "description": "Tag 3: Grenzüberschreitender Verkehr, DSB-Gumminasen und Nahverkehr in Flensburg & Neumünster.",
         "banner": "img/tour/Tag 3.png",
-        "link": "https://www.youtube.com/@max-lukatv",
+        "link": "https://youtu.be/hOGc-FQx4Tc",
     },
     {
         "date": "05.11.2026",
         "title": "Norddeutschland Tour #4: Kiel Hbf",
         "description": "Tag 4: Der Hauptbahnhof Kiel im Fokus mit bunten Triebzügen und viel Betriebsgeschehen.",
         "banner": "img/tour/Tag 4.png",
-        "link": "https://www.youtube.com/@max-lukatv",
+        "link": "https://youtu.be/WlWrUL_uChk",
     },
     {
         "date": "06.11.2026",
         "title": "Norddeutschland Tour #5: Hamburg",
         "description": "Tag 5: Die Eisenbahn-Metropole Hamburg! Fernverkehr, Metronom und RDC-Züge.",
         "banner": "img/tour/Tag 5.png",
-        "link": "https://www.youtube.com/@max-lukatv",
+        "link": "https://youtu.be/m0UgPPTDHgo",
     },
     {
         "date": "07.11.2026",
         "title": "Norddeutschland Tour #6: Lübeck",
         "description": "Tag 6: Zugverkehr rund um die Hansestadt Lübeck.",
         "banner": "img/tour/Tag 6.png",
-        "link": "https://www.youtube.com/@max-lukatv",
+        "link": "https://youtu.be/KIRakj0R7sM",
     },
     {
         "date": "08.11.2026",
         "title": "Norddeutschland Tour #7: Bergen (Rügen)",
         "description": "Tag 7: Ab auf die Insel Rügen! Urlaubsverkehr, ICs und Regionalbahnen in Bergen.",
         "banner": "img/tour/Tag 7.png",
-        "link": "https://www.youtube.com/@max-lukatv",
-    },
-    {
-        "date": "09.11.2026",
-        "title": "Norddeutschland Tour 2026: Das große Finale",
-        "description": "Der letzte Tag und Rückblick unserer großen Tour durch den Norden!",
-        "banner": "img/tour/Copilot_20260510_211043.png",
-        "link": "https://www.youtube.com/@max-lukatv",
+        "link": "https://youtu.be/B9NXZI-lpRY",
     },
 ]
 
-# Manuelle Sonder-Ankündigungen (z.B. für Dinge, die nichts mit einem
-# einzelnen Video zu tun haben). Neuester Eintrag zuerst.
+# Manuelle Sonder-Ankündigungen
 NEWS_ITEMS = [
     {
         "date": "10.08.2026",
@@ -139,12 +134,10 @@ NEWS_ITEMS = [
     },
 ]
 
-# Wie viele automatisch generierte Video/Short-News maximal angezeigt werden
 AUTO_NEWS_COUNT = 12
 
 
 def _format_date_de(iso_date_str):
-    """Wandelt 'YYYY-MM-DD' in 'DD.MM.YYYY' um, fuer einheitliche Anzeige."""
     try:
         return datetime.strptime(iso_date_str, "%Y-%m-%d").strftime("%d.%m.%Y")
     except (ValueError, TypeError):
@@ -152,7 +145,6 @@ def _format_date_de(iso_date_str):
 
 
 def _parse_de_date(date_str):
-    """Wandelt 'DD.MM.YYYY' in ein datetime-Objekt um, fuer die Sortierung."""
     try:
         return datetime.strptime(date_str, "%d.%m.%Y")
     except (ValueError, TypeError):
@@ -189,13 +181,10 @@ def get_news_items():
     all_items.sort(key=lambda item: _parse_de_date(item["date"]), reverse=True)
     return all_items[:AUTO_NEWS_COUNT]
 
-# Ziel-Marke für die Abonnenten-Fortschrittsanzeige
 SUBSCRIBER_GOAL = 5000
-
-# Link zu deinem Google Formular für Video-Einsendungen.
 EINSENDUNG_FORM_URL = "https://forms.gle/Y6D38VwWpqJV5RW97"
 
-# Schnellzugriff-Navigation oben (Events mit Blink-Klasse versehen)
+# Schnellzugriff-Navigation oben (Events mit blinkender Klasse versehen)
 NAV_ITEMS = [
     {"label": "Videos", "href": "/#latest-videos"},
     {"label": "Shorts", "href": "/#latest-shorts"},
@@ -207,10 +196,6 @@ NAV_ITEMS = [
     {"label": "Signale lernen", "href": "/signale_lernen"},
     {"label": "Kanäle", "href": "/#links"},
 ]
-
-# ---------------------------------------------------------------------------
-# Community-Seite "Schiene und Weiche"
-# ---------------------------------------------------------------------------
 
 SCHIENE_UND_WEICHE = {
     "name": "Schiene und Weiche",
@@ -325,10 +310,6 @@ PLAYLISTS_COUNT = 6
 SHORT_MAX_SECONDS = 180
 MAX_PAGES_TO_SCAN = 20
 CACHE_SECONDS = 600
-
-# ---------------------------------------------------------------------------
-# YouTube-Anbindung
-# ---------------------------------------------------------------------------
 
 _cache = {
     "channel_info": None,
