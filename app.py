@@ -709,8 +709,6 @@ def datenschutz():
     return render_template(
         "datenschutz.html",
         channel=CHANNEL,
-        nav_items=NAV_INSERT_DATENSCHUTZ = None, # (normaler Pfad bleibt)
-        channel=CHANNEL,
         nav_items=NAV_ITEMS,
         channel_avatar=_get_channel_avatar_safe(),
     )
