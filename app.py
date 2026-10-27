@@ -68,9 +68,65 @@ LINKS = [
     },
 ]
 
-# Events. Leer lassen, wenn gerade nichts geplant ist - die Seite zeigt dann
-# automatisch einen freundlichen "aktuell keine Events"-Hinweis an.
-EVENTS = []
+# Norddeutschland Tour 2026 (02.11.2026 - 09.11.2026)
+EVENTS = [
+    {
+        "date": "02.11.2026",
+        "title": "Norddeutschland Tour #1: Westerland (Sylt) & Niebüll",
+        "description": "Tag 1 der großen Norddeutschland Tour 2026! Großdieselloks, Autozüge und Marschbahn pur.",
+        "banner": "img/tour/Tag 1.png",
+        "link": "https://www.youtube.com/@max-lukatv",
+    },
+    {
+        "date": "03.11.2026",
+        "title": "Norddeutschland Tour #2: Husum / Heide",
+        "description": "Tag 2 unserer Tour an der Küste: Vorbeifahrten und Impressionen aus Husum und Heide.",
+        "banner": "img/tour/Tag 2.png",
+        "link": "https://www.youtube.com/@max-lukatv",
+    },
+    {
+        "date": "04.11.2026",
+        "title": "Norddeutschland Tour #3: Flensburg / Neumünster",
+        "description": "Tag 3: Grenzüberschreitender Verkehr, DSB-Gumminasen und Nahverkehr in Flensburg & Neumünster.",
+        "banner": "img/tour/Tag 3.png",
+        "link": "https://www.youtube.com/@max-lukatv",
+    },
+    {
+        "date": "05.11.2026",
+        "title": "Norddeutschland Tour #4: Kiel Hbf",
+        "description": "Tag 4: Der Hauptbahnhof Kiel im Fokus mit bunten Triebzügen und viel Betriebsgeschehen.",
+        "banner": "img/tour/Tag 4.png",
+        "link": "https://www.youtube.com/@max-lukatv",
+    },
+    {
+        "date": "06.11.2026",
+        "title": "Norddeutschland Tour #5: Hamburg",
+        "description": "Tag 5: Die Eisenbahn-Metropole Hamburg! Fernverkehr, Metronom und RDC-Züge.",
+        "banner": "img/tour/Tag 5.png",
+        "link": "https://www.youtube.com/@max-lukatv",
+    },
+    {
+        "date": "07.11.2026",
+        "title": "Norddeutschland Tour #6: Lübeck",
+        "description": "Tag 6: Zugverkehr rund um die Hansestadt Lübeck.",
+        "banner": "img/tour/Tag 6.png",
+        "link": "https://www.youtube.com/@max-lukatv",
+    },
+    {
+        "date": "08.11.2026",
+        "title": "Norddeutschland Tour #7: Bergen (Rügen)",
+        "description": "Tag 7: Ab auf die Insel Rügen! Urlaubsverkehr, ICs und Regionalbahnen in Bergen.",
+        "banner": "img/tour/Tag 7.png",
+        "link": "https://www.youtube.com/@max-lukatv",
+    },
+    {
+        "date": "09.11.2026",
+        "title": "Norddeutschland Tour 2026: Das große Finale",
+        "description": "Der letzte Tag und Rückblick unserer großen Tour durch den Norden!",
+        "banner": "img/tour/Copilot_20260510_211043.png",
+        "link": "https://www.youtube.com/@max-lukatv",
+    },
+]
 
 # Manuelle Sonder-Ankündigungen (z.B. für Dinge, die nichts mit einem
 # einzelnen Video zu tun haben). Neuester Eintrag zuerst.
@@ -139,12 +195,12 @@ SUBSCRIBER_GOAL = 5000
 # Link zu deinem Google Formular für Video-Einsendungen.
 EINSENDUNG_FORM_URL = "https://forms.gle/Y6D38VwWpqJV5RW97"
 
-# Schnellzugriff-Navigation oben (OHNE Impressum und Datenschutz)
+# Schnellzugriff-Navigation oben (Events mit Blink-Klasse versehen)
 NAV_ITEMS = [
     {"label": "Videos", "href": "/#latest-videos"},
     {"label": "Shorts", "href": "/#latest-shorts"},
     {"label": "Playlists", "href": "/#playlists"},
-    {"label": "Events", "href": "/event"},
+    {"label": "Events", "href": "/event", "class": "quicknav-link--event-pulse"},
     {"label": "News", "href": "/news"},
     {"label": "Einsendung", "href": "/einsendung"},
     {"label": "Schiene & Weiche", "href": "/schiene_und_weiche"},
