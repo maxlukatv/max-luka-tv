@@ -51,7 +51,7 @@
   <nav class="quicknav" aria-label="Schnellzugriff">
     <div class="wrap quicknav-inner">
       {% for item in nav_items %}
-      <a class="quicknav-link {% if item.label == 'Signale lernen' %}quicknav-link--active{% endif %}" href="{{ item.href }}">{{ item.label }}</a>
+      <a class="quicknav-link {{ item.class if item.class else '' }} {% if item.label == 'Signale lernen' %}quicknav-link--active{% endif %}" href="{{ item.href }}">{{ item.label }}</a>
       {% endfor %}
     </div>
   </nav>
