@@ -10,14 +10,7 @@ import signale_daten
 
 app = Flask(__name__)
 
-# ---------------------------------------------------------------------------
-# HIER PASST DU DEINE DATEN AN
-# ---------------------------------------------------------------------------
-
-# Deine YouTube-Kanal-ID (für @max-lukatv bereits eingetragen).
 CHANNEL_ID = "UCsPV0AoF_XE0paQPl85l8Bg"
-
-# Deinen kostenlosen YouTube-API-Key hier eintragen
 YOUTUBE_API_KEY = os.environ.get("YOUTUBE_API_KEY", "AIzaSyDEe8XyC8sSW23MJIWOiQnC3I7GsA-FKmo")
 
 CHANNEL = {
@@ -64,7 +57,6 @@ LINKS = [
     },
 ]
 
-# Norddeutschland Tour 2026 (02.11.2026 - 09.11.2026) mit angepassten Dateinamen
 EVENTS = [
     {
         "date": "02.11.2026",
@@ -124,7 +116,6 @@ EVENTS = [
     },
 ]
 
-# Manuelle Sonder-Ankündigungen
 NEWS_ITEMS = [
     {
         "date": "10.08.2026",
@@ -136,20 +127,17 @@ NEWS_ITEMS = [
 
 AUTO_NEWS_COUNT = 12
 
-
 def _format_date_de(iso_date_str):
     try:
         return datetime.strptime(iso_date_str, "%Y-%m-%d").strftime("%d.%m.%Y")
     except (ValueError, TypeError):
         return iso_date_str
 
-
 def _parse_de_date(date_str):
     try:
         return datetime.strptime(date_str, "%d.%m.%Y")
     except (ValueError, TypeError):
         return datetime.min
-
 
 def get_news_items():
     auto_items = []
@@ -184,7 +172,6 @@ def get_news_items():
 SUBSCRIBER_GOAL = 5000
 EINSENDUNG_FORM_URL = "https://forms.gle/Y6D38VwWpqJV5RW97"
 
-# Schnellzugriff-Navigation oben (Events mit blinkender Klasse versehen)
 NAV_ITEMS = [
     {"label": "Videos", "href": "/#latest-videos"},
     {"label": "Shorts", "href": "/#latest-shorts"},
@@ -320,10 +307,8 @@ _cache = {
     "playlists_fetched_at": 0,
 }
 
-
 def _api_key_configured():
     return bool(YOUTUBE_API_KEY) and YOUTUBE_API_KEY != "DEIN_API_KEY_HIER"
-
 
 def _parse_iso8601_duration(duration):
     match = re.match(
@@ -333,7 +318,6 @@ def _parse_iso8601_duration(duration):
         return 0
     hours, minutes, seconds = (int(x) if x else 0 for x in match.groups())
     return hours * 3600 + minutes * 60 + seconds
-
 
 def _get_channel_info():
     now = time.time()
@@ -380,10 +364,8 @@ def _get_channel_info():
     _cache["channel_info_fetched_at"] = now
     return info
 
-
 def _get_uploads_playlist_id():
     return _get_channel_info()["uploads_playlist_id"]
-
 
 def _fetch_recent_videos_with_stats():
     now = time.time()
@@ -484,26 +466,21 @@ def _fetch_recent_videos_with_stats():
     _cache["videos_fetched_at"] = now
     return videos
 
-
 def get_latest_videos():
     videos = [v for v in _fetch_recent_videos_with_stats() if not v["is_short"]]
     return videos[:LATEST_VIDEOS_COUNT]
-
 
 def get_top_videos():
     videos = [v for v in _fetch_recent_videos_with_stats() if not v["is_short"]]
     return sorted(videos, key=lambda v: v["views"], reverse=True)[:TOP_VIDEOS_COUNT]
 
-
 def get_latest_shorts():
     shorts = [v for v in _fetch_recent_videos_with_stats() if v["is_short"]]
     return shorts[:LATEST_SHORTS_COUNT]
 
-
 def get_top_shorts():
     shorts = [v for v in _fetch_recent_videos_with_stats() if v["is_short"]]
     return sorted(shorts, key=lambda v: v["views"], reverse=True)[:TOP_SHORTS_COUNT]
-
 
 def get_playlists():
     now = time.time()
@@ -546,7 +523,6 @@ def get_playlists():
     _cache["playlists_fetched_at"] = now
     return playlists
 
-
 def _get_channel_avatar_safe():
     if not _api_key_configured():
         return None
@@ -556,11 +532,9 @@ def _get_channel_avatar_safe():
         print("YOUTUBE-FEHLER (Avatar):", repr(e))
         return None
 
-
 @app.route("/ping")
 def ping():
     return "OK", 200
-
 
 @app.route("/")
 def index():
@@ -622,7 +596,6 @@ def index():
         videos_error=videos_error,
     )
 
-
 @app.route("/news")
 def news():
     return render_template(
@@ -634,18 +607,27 @@ def news():
         channel_avatar=_get_channel_avatar_safe(),
     )
 
-
 @app.route("/event")
 def event():
+    now = datetime.now()
+    processed_events = []
+    for ev in EVENTS:
+        item = dict(ev)
+        try:
+            ev_date = datetime.strptime(item["date"], "%d.%m.%Y")
+            item["is_available"] = now >= ev_date
+        except ValueError:
+            item["is_available"] = False
+        processed_events.append(item)
+
     return render_template(
         "event.html",
         channel=CHANNEL,
         links=LINKS,
         nav_items=NAV_ITEMS,
-        events=EVENTS,
+        events=processed_events,
         channel_avatar=_get_channel_avatar_safe(),
     )
-
 
 @app.route("/einsendung")
 def einsendung():
@@ -657,7 +639,6 @@ def einsendung():
         form_url=EINSENDUNG_FORM_URL,
         channel_avatar=_get_channel_avatar_safe(),
     )
-
 
 @app.route("/schiene_und_weiche")
 def schiene_und_weiche():
@@ -673,7 +654,6 @@ def schiene_und_weiche():
         channel_avatar=_get_channel_avatar_safe(),
     )
 
-
 @app.route("/signale_lernen")
 def signale_lernen():
     return render_template(
@@ -686,13 +666,9 @@ def signale_lernen():
         channel_avatar=_get_channel_avatar_safe(),
     )
 
-
 @app.route("/signale_lernen/fragen")
 def signale_lernen_fragen():
     return jsonify(signale_daten.baue_fragen())
-
-
-# --- Routen für Impressum & Datenschutz (für den Footer) ---
 
 @app.route("/impressum")
 def impressum():
@@ -703,7 +679,6 @@ def impressum():
         channel_avatar=_get_channel_avatar_safe(),
     )
 
-
 @app.route("/datenschutz")
 def datenschutz():
     return render_template(
@@ -712,7 +687,6 @@ def datenschutz():
         nav_items=NAV_ITEMS,
         channel_avatar=_get_channel_avatar_safe(),
     )
-
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5050, debug=True)
