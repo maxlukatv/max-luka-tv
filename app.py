@@ -10,7 +10,18 @@ import signale_daten
 
 app = Flask(__name__)
 
+# ---------------------------------------------------------------------------
+# HIER PASST DU DEINE DATEN AN
+# ---------------------------------------------------------------------------
+
+# Deine YouTube-Kanal-ID (für @max-lukatv bereits eingetragen).
+# Falls du sie für einen anderen Kanal brauchst: Kanal öffnen -> Rechtsklick
+# -> "Seitenquelltext anzeigen" -> nach "channelId" suchen.
 CHANNEL_ID = "UCsPV0AoF_XE0paQPl85l8Bg"
+
+# Deinen kostenlosen YouTube-API-Key hier eintragen (siehe README, Abschnitt
+# "YouTube API-Key einrichten"). Alternativ als Umgebungsvariable setzen:
+# Windows PowerShell:  $env:YOUTUBE_API_KEY = "dein-key"
 YOUTUBE_API_KEY = os.environ.get("YOUTUBE_API_KEY", "AIzaSyDEe8XyC8sSW23MJIWOiQnC3I7GsA-FKmo")
 
 CHANNEL = {
@@ -57,65 +68,12 @@ LINKS = [
     },
 ]
 
-EVENTS = [
-    {
-        "date": "02.11.2026",
-        "title": "Norddeutschland Tour #1 (Teil 1): Westerland (Sylt) & Niebüll",
-        "description": "Tag 1 (Teil 1) der großen Norddeutschland Tour 2026! Großdieselloks, Autozüge und Marschbahn pur.",
-        "banner": "img/tour/Tag_1_Teil_1.png",
-        "link": "https://youtu.be/dojOztatxRI",
-    },
-    {
-        "date": "02.11.2026",
-        "title": "Norddeutschland Tour #1 (Teil 2): Niebüll & Marschbahn",
-        "description": "Tag 1 (Teil 2) unserer Tour im hohen Norden.",
-        "banner": "img/tour/Tag_1_Teil_2.png",
-        "link": "https://youtu.be/5QZgdjJijQw",
-    },
-    {
-        "date": "03.11.2026",
-        "title": "Norddeutschland Tour #2: Husum / Heide",
-        "description": "Tag 2 unserer Tour an der Küste: Vorbeifahrten und Impressionen aus Husum und Heide.",
-        "banner": "img/tour/Tag_2.png",
-        "link": "https://youtu.be/GnNyrgr-ZDk",
-    },
-    {
-        "date": "04.11.2026",
-        "title": "Norddeutschland Tour #3: Flensburg / Neumünster",
-        "description": "Tag 3: Grenzüberschreitender Verkehr, DSB-Gumminasen und Nahverkehr in Flensburg & Neumünster.",
-        "banner": "img/tour/Tag_3.png",
-        "link": "https://youtu.be/hOGc-FQx4Tc",
-    },
-    {
-        "date": "05.11.2026",
-        "title": "Norddeutschland Tour #4: Kiel Hbf",
-        "description": "Tag 4: Der Hauptbahnhof Kiel im Fokus mit bunten Triebzügen und viel Betriebsgeschehen.",
-        "banner": "img/tour/Tag_4.png",
-        "link": "https://youtu.be/WlWrUL_uChk",
-    },
-    {
-        "date": "06.11.2026",
-        "title": "Norddeutschland Tour #5: Hamburg",
-        "description": "Tag 5: Die Eisenbahn-Metropole Hamburg! Fernverkehr, Metronom und RDC-Züge.",
-        "banner": "img/tour/Tag_5.png",
-        "link": "https://youtu.be/m0UgPPTDHgo",
-    },
-    {
-        "date": "07.11.2026",
-        "title": "Norddeutschland Tour #6: Lübeck",
-        "description": "Tag 6: Zugverkehr rund um die Hansestadt Lübeck.",
-        "banner": "img/tour/Tag_6.png",
-        "link": "https://youtu.be/KIRakj0R7sM",
-    },
-    {
-        "date": "08.11.2026",
-        "title": "Norddeutschland Tour #7: Bergen (Rügen)",
-        "description": "Tag 7: Ab auf die Insel Rügen! Urlaubsverkehr, ICs und Regionalbahnen in Bergen.",
-        "banner": "img/tour/Tag_7.png",
-        "link": "https://youtu.be/B9NXZI-lpRY",
-    },
-]
+# Events. Leer lassen, wenn gerade nichts geplant ist - die Seite zeigt dann
+# automatisch einen freundlichen "aktuell keine Events"-Hinweis an.
+EVENTS = []
 
+# Manuelle Sonder-Ankündigungen (z.B. für Dinge, die nichts mit einem
+# einzelnen Video zu tun haben). Neuester Eintrag zuerst.
 NEWS_ITEMS = [
     {
         "date": "10.08.2026",
@@ -125,19 +83,25 @@ NEWS_ITEMS = [
     },
 ]
 
+# Wie viele automatisch generierte Video/Short-News maximal angezeigt werden
 AUTO_NEWS_COUNT = 12
 
+
 def _format_date_de(iso_date_str):
+    """Wandelt 'YYYY-MM-DD' in 'DD.MM.YYYY' um, fuer einheitliche Anzeige."""
     try:
         return datetime.strptime(iso_date_str, "%Y-%m-%d").strftime("%d.%m.%Y")
     except (ValueError, TypeError):
         return iso_date_str
 
+
 def _parse_de_date(date_str):
+    """Wandelt 'DD.MM.YYYY' in ein datetime-Objekt um, fuer die Sortierung."""
     try:
         return datetime.strptime(date_str, "%d.%m.%Y")
     except (ValueError, TypeError):
         return datetime.min
+
 
 def get_news_items():
     auto_items = []
@@ -169,20 +133,28 @@ def get_news_items():
     all_items.sort(key=lambda item: _parse_de_date(item["date"]), reverse=True)
     return all_items[:AUTO_NEWS_COUNT]
 
+# Ziel-Marke für die Abonnenten-Fortschrittsanzeige
 SUBSCRIBER_GOAL = 5000
+
+# Link zu deinem Google Formular für Video-Einsendungen.
 EINSENDUNG_FORM_URL = "https://forms.gle/Y6D38VwWpqJV5RW97"
 
+# Schnellzugriff-Navigation oben (OHNE Impressum und Datenschutz)
 NAV_ITEMS = [
     {"label": "Videos", "href": "/#latest-videos"},
     {"label": "Shorts", "href": "/#latest-shorts"},
     {"label": "Playlists", "href": "/#playlists"},
-    {"label": "Events", "href": "/event", "class": "quicknav-link--event-pulse"},
+    {"label": "Events", "href": "/event"},
     {"label": "News", "href": "/news"},
     {"label": "Einsendung", "href": "/einsendung"},
     {"label": "Schiene & Weiche", "href": "/schiene_und_weiche"},
     {"label": "Signale lernen", "href": "/signale_lernen"},
     {"label": "Kanäle", "href": "/#links"},
 ]
+
+# ---------------------------------------------------------------------------
+# Community-Seite "Schiene und Weiche"
+# ---------------------------------------------------------------------------
 
 SCHIENE_UND_WEICHE = {
     "name": "Schiene und Weiche",
@@ -298,6 +270,10 @@ SHORT_MAX_SECONDS = 180
 MAX_PAGES_TO_SCAN = 20
 CACHE_SECONDS = 600
 
+# ---------------------------------------------------------------------------
+# YouTube-Anbindung
+# ---------------------------------------------------------------------------
+
 _cache = {
     "channel_info": None,
     "channel_info_fetched_at": 0,
@@ -307,8 +283,10 @@ _cache = {
     "playlists_fetched_at": 0,
 }
 
+
 def _api_key_configured():
     return bool(YOUTUBE_API_KEY) and YOUTUBE_API_KEY != "DEIN_API_KEY_HIER"
+
 
 def _parse_iso8601_duration(duration):
     match = re.match(
@@ -318,6 +296,7 @@ def _parse_iso8601_duration(duration):
         return 0
     hours, minutes, seconds = (int(x) if x else 0 for x in match.groups())
     return hours * 3600 + minutes * 60 + seconds
+
 
 def _get_channel_info():
     now = time.time()
@@ -364,8 +343,10 @@ def _get_channel_info():
     _cache["channel_info_fetched_at"] = now
     return info
 
+
 def _get_uploads_playlist_id():
     return _get_channel_info()["uploads_playlist_id"]
+
 
 def _fetch_recent_videos_with_stats():
     now = time.time()
@@ -466,21 +447,26 @@ def _fetch_recent_videos_with_stats():
     _cache["videos_fetched_at"] = now
     return videos
 
+
 def get_latest_videos():
     videos = [v for v in _fetch_recent_videos_with_stats() if not v["is_short"]]
     return videos[:LATEST_VIDEOS_COUNT]
+
 
 def get_top_videos():
     videos = [v for v in _fetch_recent_videos_with_stats() if not v["is_short"]]
     return sorted(videos, key=lambda v: v["views"], reverse=True)[:TOP_VIDEOS_COUNT]
 
+
 def get_latest_shorts():
     shorts = [v for v in _fetch_recent_videos_with_stats() if v["is_short"]]
     return shorts[:LATEST_SHORTS_COUNT]
 
+
 def get_top_shorts():
     shorts = [v for v in _fetch_recent_videos_with_stats() if v["is_short"]]
     return sorted(shorts, key=lambda v: v["views"], reverse=True)[:TOP_SHORTS_COUNT]
+
 
 def get_playlists():
     now = time.time()
@@ -523,6 +509,7 @@ def get_playlists():
     _cache["playlists_fetched_at"] = now
     return playlists
 
+
 def _get_channel_avatar_safe():
     if not _api_key_configured():
         return None
@@ -532,9 +519,11 @@ def _get_channel_avatar_safe():
         print("YOUTUBE-FEHLER (Avatar):", repr(e))
         return None
 
+
 @app.route("/ping")
 def ping():
     return "OK", 200
+
 
 @app.route("/")
 def index():
@@ -596,6 +585,7 @@ def index():
         videos_error=videos_error,
     )
 
+
 @app.route("/news")
 def news():
     return render_template(
@@ -607,27 +597,18 @@ def news():
         channel_avatar=_get_channel_avatar_safe(),
     )
 
+
 @app.route("/event")
 def event():
-    now = datetime.now()
-    processed_events = []
-    for ev in EVENTS:
-        item = dict(ev)
-        try:
-            ev_date = datetime.strptime(item["date"], "%d.%m.%Y")
-            item["is_available"] = now >= ev_date
-        except ValueError:
-            item["is_available"] = False
-        processed_events.append(item)
-
     return render_template(
         "event.html",
         channel=CHANNEL,
         links=LINKS,
         nav_items=NAV_ITEMS,
-        events=processed_events,
+        events=EVENTS,
         channel_avatar=_get_channel_avatar_safe(),
     )
+
 
 @app.route("/einsendung")
 def einsendung():
@@ -639,6 +620,7 @@ def einsendung():
         form_url=EINSENDUNG_FORM_URL,
         channel_avatar=_get_channel_avatar_safe(),
     )
+
 
 @app.route("/schiene_und_weiche")
 def schiene_und_weiche():
@@ -654,6 +636,7 @@ def schiene_und_weiche():
         channel_avatar=_get_channel_avatar_safe(),
     )
 
+
 @app.route("/signale_lernen")
 def signale_lernen():
     return render_template(
@@ -666,9 +649,13 @@ def signale_lernen():
         channel_avatar=_get_channel_avatar_safe(),
     )
 
+
 @app.route("/signale_lernen/fragen")
 def signale_lernen_fragen():
     return jsonify(signale_daten.baue_fragen())
+
+
+# --- Routen für Impressum & Datenschutz (für den Footer) ---
 
 @app.route("/impressum")
 def impressum():
@@ -679,6 +666,7 @@ def impressum():
         channel_avatar=_get_channel_avatar_safe(),
     )
 
+
 @app.route("/datenschutz")
 def datenschutz():
     return render_template(
@@ -687,6 +675,7 @@ def datenschutz():
         nav_items=NAV_ITEMS,
         channel_avatar=_get_channel_avatar_safe(),
     )
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5050, debug=True)
