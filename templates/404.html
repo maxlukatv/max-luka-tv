@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <script>
+    (function () {
+      try {
+        if (localStorage.getItem('mltv-theme') === 'dark') {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+      } catch (e) {}
+    })();
+  </script>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='img/favicon.svg') }}">
+  <link rel="alternate icon" href="{{ url_for('static', filename='img/favicon.png') }}">
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/apple-touch-icon.png') }}">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 – Seite nicht gefunden | {{ channel.name }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+  <!-- ============ HEADER ============ -->
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a href="/#top" class="logo">
+        {% if channel_avatar %}
+        <img class="logo-avatar" src="{{ channel_avatar }}" alt="{{ channel.name }}">
+        {% else %}
+        <span class="logo-mark">MLTV</span>
+        {% endif %}
+        <span class="logo-text">{{ channel.name }}</span>
+      </a>
+      <div class="header-badges">
+        <div class="status-badge">
+          <span class="status-dot"></span>
+          LIVE
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============ HELL-/DUNKELMODUS-KETTCHEN ============ -->
+  <button type="button" class="theme-pull" aria-label="Zu Dunkelmodus wechseln">
+    <span class="theme-pull-cord"></span>
+    <span class="theme-pull-knob">☀️</span>
+  </button>
+
+  <!-- ============ SCHNELLZUGRIFF ============ -->
+  <nav class="quicknav" aria-label="Schnellzugriff">
+    <div class="wrap quicknav-inner">
+      {% for item in nav_items %}
+      <a class="quicknav-link {{ item.class if item.class else '' }}" href="{{ item.href }}">{{ item.label }}</a>
+      {% endfor %}
+    </div>
+  </nav>
+
+  <!-- ============ WARNSTREIFEN ============ -->
+  <div class="hazard-stripe" aria-hidden="true"></div>
+
+  <main id="top">
+    <section class="hero" style="padding: 64px 0 80px; text-align: center;">
+      <div class="wrap hero-inner" style="display: flex; flex-direction: column; align-items: center;">
+        <p class="eyebrow">FEHLERCODE 404 · SIGNALSTÖRUNG</p>
+        
+        <h1 class="hero-title" style="font-size: clamp(56px, 8vw, 96px); margin-bottom: 8px; line-height: 1;">Ups!</h1>
+        <p class="hero-tagline" style="font-size: clamp(18px, 2.5vw, 24px); margin-bottom: 32px;">Hier gibt es leider nichts zu sehen!</p>
+        
+        <!-- Kaputtes Formsignal -->
+        <div style="margin: 8px 0 36px; display: flex; justify-content: center;">
+          <img src="{{ url_for('static', filename='img/signal_404.png') }}" alt="Kaputtes Formsignal (Fehler 404)" style="max-height: 280px; width: auto; object-fit: contain;">
+        </div>
+
+        <!-- Button zurück zur Startseite -->
+        <div class="hero-cta">
+          <a href="/" class="btn btn-primary">← Zurück zur Startseite</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <span>{{ channel.name }} © 2026</span>
+      <span class="footer-sep">·</span>
+      <span>Erstellt mit Python &amp; Flask &amp; AI</span>
+      <span class="footer-sep">·</span>
+      <a href="{{ url_for('impressum') }}">Impressum</a>
+      <span class="footer-sep">·</span>
+      <a href="{{ url_for('datenschutz') }}">Datenschutz</a>
+    </div>
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
