@@ -677,5 +677,20 @@ def datenschutz():
     )
 
 
+# --- 404 Fehlerseite ---
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return (
+        render_template(
+            "404.html",
+            channel=CHANNEL,
+            nav_items=NAV_ITEMS,
+            channel_avatar=_get_channel_avatar_safe(),
+        ),
+        404,
+    )
+
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5050, debug=True)
