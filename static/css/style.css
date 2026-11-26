@@ -1499,6 +1499,132 @@ a {
   .theme-pull { right: 16px; }
 }
 
+/* ==========================================================================
+   WEIHNACHTSSTIMMUNG (Schneeflocken, Schneemann & Weihnachtsmann-Schlitten)
+   ========================================================================== */
+
+.xmas-snowflake {
+  position: fixed;
+  top: -30px;
+  color: #ffffff;
+  text-shadow: 0 0 6px rgba(140, 190, 255, 0.85), 0 1px 2px rgba(0, 0, 0, 0.25);
+  user-select: none;
+  pointer-events: none;
+  z-index: 9998;
+  animation-name: xmas-fall;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+@keyframes xmas-fall {
+  0% {
+    transform: translateY(0) translateX(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(52vh) translateX(18px) rotate(180deg);
+  }
+  100% {
+    transform: translateY(105vh) translateX(-12px) rotate(360deg);
+  }
+}
+
+/* Kleiner Schneemann unten links */
+.xmas-snowman {
+  position: fixed;
+  bottom: 14px;
+  left: 16px;
+  font-size: 38px;
+  line-height: 1;
+  z-index: 9997;
+  cursor: pointer;
+  user-select: none;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.25));
+  transition: transform 0.25s ease;
+}
+
+.xmas-snowman:hover {
+  transform: scale(1.15) rotate(-6deg);
+}
+
+.xmas-snowman::after {
+  content: "Frohe Weihnachten! 🎄";
+  position: absolute;
+  left: 48px;
+  bottom: 8px;
+  background: var(--surface, #ffffff);
+  color: var(--text, #111111);
+  border: 1px solid var(--border, #dddddd);
+  font-family: var(--font-mono, monospace);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 10px;
+  border-radius: 8px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-6px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.xmas-snowman:hover::after {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Fliegender Weihnachtsmann auf Schlitten */
+.xmas-santa {
+  position: fixed;
+  top: 78px;
+  left: -260px;
+  font-size: 28px;
+  line-height: 1;
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+  z-index: 9999;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.3));
+  animation: xmas-santa-fly 14s linear forwards;
+}
+
+/* Rentiere + Schlitten gespiegelt, damit sie nach rechts fliegen */
+.xmas-santa-inner {
+  display: inline-block;
+  transform: scaleX(-1);
+}
+
+@keyframes xmas-santa-fly {
+  0% {
+    left: -260px;
+    transform: translateY(0px) rotate(-2deg);
+  }
+  25% {
+    transform: translateY(-14px) rotate(2deg);
+  }
+  50% {
+    transform: translateY(6px) rotate(-2deg);
+  }
+  75% {
+    transform: translateY(-10px) rotate(2deg);
+  }
+  100% {
+    left: calc(100vw + 260px);
+    transform: translateY(0px) rotate(0deg);
+  }
+}
+
+@media (max-width: 600px) {
+  .xmas-snowman {
+    font-size: 30px;
+    bottom: 10px;
+    left: 10px;
+  }
+  .xmas-santa {
+    font-size: 22px;
+    top: 64px;
+  }
+}
+
 /* ---------------------------- Footer ---------------------------- */
 
 .site-footer {
