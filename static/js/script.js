@@ -88,25 +88,28 @@ document.addEventListener("DOMContentLoaded", () => {
   if (!isChristmasSeason) return;
 
   document.addEventListener("DOMContentLoaded", () => {
-    // 1. Schneemann unten links einfügen
+    // Winterlich dunklen, bläulichen Hintergrund aktivieren
+    document.body.classList.add("xmas-theme");
+
+    // 1. Größeren Schneemann unten links einfügen
     const snowman = document.createElement("div");
     snowman.className = "xmas-snowman";
     snowman.textContent = "⛄";
     snowman.setAttribute("aria-hidden", "true");
     document.body.appendChild(snowman);
 
-    // 2. Schneeflocken-Generator
-    const flakes = ["❄", "❅", "❆", "•"];
+    // 2. Schneeflocken-Generator (größer, kräftiger und etwas dichter)
+    const flakes = ["❄", "❅", "❆", "❄", "❅"];
     function spawnSnowflake() {
       if (document.hidden) return;
       const flake = document.createElement("span");
       flake.className = "xmas-snowflake";
       flake.textContent = flakes[Math.floor(Math.random() * flakes.length)];
 
-      const size = Math.random() * 12 + 10; // 10px bis 22px
+      const size = Math.random() * 18 + 16; // 16px bis 34px
       const startLeft = Math.random() * 100; // 0vw bis 100vw
-      const duration = Math.random() * 6 + 7; // 7s bis 13s
-      const opacity = Math.random() * 0.5 + 0.45;
+      const duration = Math.random() * 5 + 6.5; // 6.5s bis 11.5s
+      const opacity = Math.random() * 0.25 + 0.75; // 0.75 bis 1.0 (stark sichtbar)
 
       flake.style.left = startLeft + "vw";
       flake.style.fontSize = size + "px";
@@ -120,25 +123,35 @@ document.addEventListener("DOMContentLoaded", () => {
       }, duration * 1000 + 200);
     }
 
-    // Alle 450 ms eine neue Schneeflocke
-    setInterval(spawnSnowflake, 450);
+    // Alle 320 ms eine neue Schneeflocke
+    setInterval(spawnSnowflake, 320);
 
-    // 3. Weihnachtsmann auf Schlitten fliegen lassen
+    // 3. Weihnachtsmann auf Schlitten zu zufälligen Zeiten & Höhen fliegen lassen
     function spawnSanta() {
-      if (document.hidden) return;
-      const santa = document.createElement("div");
-      santa.className = "xmas-santa";
-      santa.setAttribute("aria-hidden", "true");
-      santa.innerHTML = '<span class="xmas-santa-inner">🎅🛷🦌🦌</span>';
-      document.body.appendChild(santa);
+      if (!document.hidden) {
+        const santa = document.createElement("div");
+        santa.className = "xmas-santa";
+        santa.setAttribute("aria-hidden", "true");
 
-      setTimeout(() => {
-        santa.remove();
-      }, 14500);
+        // Zufällige Flughöhe zwischen 10% und 42% der Bildschirmhöhe
+        const randomTop = Math.floor(Math.random() * 32) + 10;
+        santa.style.top = randomTop + "vh";
+
+        santa.innerHTML = '<span class="xmas-santa-inner">🎅🛷🦌🦌</span>';
+        document.body.appendChild(santa);
+
+        setTimeout(() => {
+          santa.remove();
+        }, 13500);
+      }
+
+      // Nächsten Flug zufällig in 15 bis 55 Sekunden planen
+      const nextDelay = Math.floor(Math.random() * 40000) + 15000;
+      setTimeout(spawnSanta, nextDelay);
     }
 
-    // Erster Flug 4 Sekunden nach Seitenaufruf, danach alle 45 Sekunden
-    setTimeout(spawnSanta, 4000);
-    setInterval(spawnSanta, 45000);
+    // Erster Flug zufällig zwischen 3 und 12 Sekunden nach Seitenaufruf
+    const initialDelay = Math.floor(Math.random() * 9000) + 3000;
+    setTimeout(spawnSanta, initialDelay);
   });
 })();
