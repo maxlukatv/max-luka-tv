@@ -70,3 +70,75 @@ document.addEventListener("DOMContentLoaded", () => {
     updateKnob();
   });
 });
+
+/* ==========================================================================
+   WEIHNACHTSSTIMMUNG (Aktiv vom 25. November bis 6. Januar)
+   ========================================================================== */
+(function () {
+  const now = new Date();
+  const month = now.getMonth(); // 0 = Jan, 10 = Nov, 11 = Dez
+  const day = now.getDate();
+
+  // Aktiv ab 25. November bis einschließlich 6. Januar
+  const isChristmasSeason =
+    (month === 10 && day >= 25) ||
+    month === 11 ||
+    (month === 0 && day <= 6);
+
+  if (!isChristmasSeason) return;
+
+  document.addEventListener("DOMContentLoaded", () => {
+    // 1. Schneemann unten links einfügen
+    const snowman = document.createElement("div");
+    snowman.className = "xmas-snowman";
+    snowman.textContent = "⛄";
+    snowman.setAttribute("aria-hidden", "true");
+    document.body.appendChild(snowman);
+
+    // 2. Schneeflocken-Generator
+    const flakes = ["❄", "❅", "❆", "•"];
+    function spawnSnowflake() {
+      if (document.hidden) return;
+      const flake = document.createElement("span");
+      flake.className = "xmas-snowflake";
+      flake.textContent = flakes[Math.floor(Math.random() * flakes.length)];
+
+      const size = Math.random() * 12 + 10; // 10px bis 22px
+      const startLeft = Math.random() * 100; // 0vw bis 100vw
+      const duration = Math.random() * 6 + 7; // 7s bis 13s
+      const opacity = Math.random() * 0.5 + 0.45;
+
+      flake.style.left = startLeft + "vw";
+      flake.style.fontSize = size + "px";
+      flake.style.opacity = opacity.toFixed(2);
+      flake.style.animationDuration = duration + "s";
+
+      document.body.appendChild(flake);
+
+      setTimeout(() => {
+        flake.remove();
+      }, duration * 1000 + 200);
+    }
+
+    // Alle 450 ms eine neue Schneeflocke
+    setInterval(spawnSnowflake, 450);
+
+    // 3. Weihnachtsmann auf Schlitten fliegen lassen
+    function spawnSanta() {
+      if (document.hidden) return;
+      const santa = document.createElement("div");
+      santa.className = "xmas-santa";
+      santa.setAttribute("aria-hidden", "true");
+      santa.innerHTML = '<span class="xmas-santa-inner">🎅🛷🦌🦌</span>';
+      document.body.appendChild(santa);
+
+      setTimeout(() => {
+        santa.remove();
+      }, 14500);
+    }
+
+    // Erster Flug 4 Sekunden nach Seitenaufruf, danach alle 45 Sekunden
+    setTimeout(spawnSanta, 4000);
+    setInterval(spawnSanta, 45000);
+  });
+})();
