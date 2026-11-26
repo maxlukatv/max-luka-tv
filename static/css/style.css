@@ -1500,14 +1500,64 @@ a {
 }
 
 /* ==========================================================================
-   WEIHNACHTSSTIMMUNG (Schneeflocken, Schneemann & Weihnachtsmann-Schlitten)
+   WEIHNACHTSSTIMMUNG (Winter-Blau, größere Schneeflocken & Symbole)
    ========================================================================== */
+
+body.xmas-theme {
+  background-color: #131d2e;
+  background-image:
+    radial-gradient(ellipse at top, rgba(64, 128, 210, 0.24), transparent 70%),
+    linear-gradient(rgba(130, 175, 235, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(130, 175, 235, 0.06) 1px, transparent 1px);
+  color: #f0f5fc;
+}
+
+[data-theme="dark"] body.xmas-theme,
+html[data-theme="dark"] body.xmas-theme {
+  background-color: #0b111d;
+  background-image:
+    radial-gradient(ellipse at top, rgba(45, 105, 185, 0.22), transparent 70%),
+    linear-gradient(rgba(120, 165, 230, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(120, 165, 230, 0.05) 1px, transparent 1px);
+}
+
+body.xmas-theme .section-title,
+body.xmas-theme .hero-title,
+body.xmas-theme .logo-text,
+body.xmas-theme .departure-title {
+  color: #f4f8ff;
+}
+
+body.xmas-theme .hero-tagline,
+body.xmas-theme .about-text,
+body.xmas-theme .stat-label,
+body.xmas-theme .stat-note,
+body.xmas-theme .footer-inner {
+  color: #b8c9e0;
+}
+
+body.xmas-theme .site-header {
+  background: rgba(19, 29, 46, 0.9);
+  border-bottom-color: #263957;
+}
+
+body.xmas-theme .quicknav {
+  background: #101827;
+  border-bottom-color: #263957;
+}
+
+body.xmas-theme .quicknav-link {
+  color: #b8c9e0;
+}
 
 .xmas-snowflake {
   position: fixed;
-  top: -30px;
+  top: -40px;
   color: #ffffff;
-  text-shadow: 0 0 6px rgba(140, 190, 255, 0.85), 0 1px 2px rgba(0, 0, 0, 0.25);
+  text-shadow:
+    0 0 8px rgba(130, 200, 255, 0.95),
+    0 0 16px rgba(80, 160, 255, 0.7),
+    0 2px 4px rgba(0, 0, 0, 0.45);
   user-select: none;
   pointer-events: none;
   z-index: 9998;
@@ -1521,24 +1571,23 @@ a {
     transform: translateY(0) translateX(0) rotate(0deg);
   }
   50% {
-    transform: translateY(52vh) translateX(18px) rotate(180deg);
+    transform: translateY(52vh) translateX(22px) rotate(180deg);
   }
   100% {
-    transform: translateY(105vh) translateX(-12px) rotate(360deg);
+    transform: translateY(106vh) translateX(-16px) rotate(360deg);
   }
 }
 
-/* Kleiner Schneemann unten links */
 .xmas-snowman {
   position: fixed;
-  bottom: 14px;
-  left: 16px;
-  font-size: 38px;
+  bottom: 16px;
+  left: 18px;
+  font-size: 54px;
   line-height: 1;
   z-index: 9997;
   cursor: pointer;
   user-select: none;
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.25));
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.4));
   transition: transform 0.25s ease;
 }
 
@@ -1549,22 +1598,22 @@ a {
 .xmas-snowman::after {
   content: "Frohe Weihnachten! 🎄";
   position: absolute;
-  left: 48px;
-  bottom: 8px;
+  left: 64px;
+  bottom: 14px;
   background: var(--surface, #ffffff);
   color: var(--text, #111111);
   border: 1px solid var(--border, #dddddd);
   font-family: var(--font-mono, monospace);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
-  padding: 5px 10px;
+  padding: 6px 12px;
   border-radius: 8px;
   white-space: nowrap;
   opacity: 0;
   pointer-events: none;
   transform: translateX(-6px);
   transition: opacity 0.2s ease, transform 0.2s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
 }
 
 .xmas-snowman:hover::after {
@@ -1572,22 +1621,20 @@ a {
   transform: translateX(0);
 }
 
-/* Fliegender Weihnachtsmann auf Schlitten */
 .xmas-santa {
   position: fixed;
-  top: 78px;
-  left: -260px;
-  font-size: 28px;
+  top: 84px;
+  left: -340px;
+  font-size: 44px;
   line-height: 1;
   white-space: nowrap;
   pointer-events: none;
   user-select: none;
   z-index: 9999;
-  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.3));
-  animation: xmas-santa-fly 14s linear forwards;
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.45));
+  animation: xmas-santa-fly 13s linear forwards;
 }
 
-/* Rentiere + Schlitten gespiegelt, damit sie nach rechts fliegen */
 .xmas-santa-inner {
   display: inline-block;
   transform: scaleX(-1);
@@ -1595,33 +1642,32 @@ a {
 
 @keyframes xmas-santa-fly {
   0% {
-    left: -260px;
+    left: -340px;
     transform: translateY(0px) rotate(-2deg);
   }
   25% {
-    transform: translateY(-14px) rotate(2deg);
+    transform: translateY(-18px) rotate(2deg);
   }
   50% {
-    transform: translateY(6px) rotate(-2deg);
+    transform: translateY(8px) rotate(-2deg);
   }
   75% {
-    transform: translateY(-10px) rotate(2deg);
+    transform: translateY(-14px) rotate(2deg);
   }
   100% {
-    left: calc(100vw + 260px);
+    left: calc(100vw + 340px);
     transform: translateY(0px) rotate(0deg);
   }
 }
 
 @media (max-width: 600px) {
   .xmas-snowman {
-    font-size: 30px;
-    bottom: 10px;
-    left: 10px;
+    font-size: 42px;
+    bottom: 12px;
+    left: 12px;
   }
   .xmas-santa {
-    font-size: 22px;
-    top: 64px;
+    font-size: 32px;
   }
 }
 
@@ -1643,3 +1689,170 @@ a {
 .footer-sep {
   opacity: 0.5;
 }
+```[cite: 3]
+
+---
+
+### 2. Aktualisierte JavaScript-Datei (`script_2.js`)
+
+```javascript
+// Sanfte Scroll-Reveal-Animation für News-Karten und Link-Kacheln
+document.addEventListener("DOMContentLoaded", () => {
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const items = document.querySelectorAll(".video-card, .link-card, .news-card");
+
+  if (prefersReducedMotion || !("IntersectionObserver" in window)) {
+    items.forEach((el) => el.style.opacity = 1);
+    return;
+  }
+
+  items.forEach((el) => {
+    el.style.opacity = 0;
+    el.style.transform = "translateY(12px)";
+    el.style.transition = "opacity 0.5s ease, transform 0.5s ease";
+  });
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = 1;
+          entry.target.style.transform = "translateY(0)";
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.15 }
+  );
+
+  items.forEach((el) => observer.observe(el));
+});
+
+// Hell-/Dunkelmodus-Kettchen: Klick "zieht" das Kettchen und schaltet das
+// Farbschema um. Die Wahl wird gespeichert, damit sie auf jeder Unterseite
+// erhalten bleibt (das Umschalten selbst ist nur auf der Startseite
+// möglich, aber der gewählte Modus gilt für die ganze Webseite).
+document.addEventListener("DOMContentLoaded", () => {
+  const toggle = document.querySelector(".theme-pull");
+  if (!toggle) return;
+
+  const knob = toggle.querySelector(".theme-pull-knob");
+  const root = document.documentElement;
+
+  function isDarkActive() {
+    return root.getAttribute("data-theme") === "dark";
+  }
+
+  function updateKnob() {
+    const dark = isDarkActive();
+    knob.textContent = dark ? "🌙" : "☀️";
+    toggle.setAttribute(
+      "aria-label",
+      dark ? "Zu Hellmodus wechseln" : "Zu Dunkelmodus wechseln"
+    );
+  }
+
+  updateKnob();
+
+  toggle.addEventListener("click", () => {
+    toggle.classList.add("pulling");
+    setTimeout(() => toggle.classList.remove("pulling"), 550);
+
+    if (isDarkActive()) {
+      root.removeAttribute("data-theme");
+      try { localStorage.setItem("mltv-theme", "light"); } catch (e) {}
+    } else {
+      root.setAttribute("data-theme", "dark");
+      try { localStorage.setItem("mltv-theme", "dark"); } catch (e) {}
+    }
+    updateKnob();
+  });
+});
+
+/* ==========================================================================
+   WEIHNACHTSSTIMMUNG (Aktiv vom 25. November bis 6. Januar)
+   ========================================================================== */
+(function () {
+  const now = new Date();
+  const month = now.getMonth(); // 0 = Jan, 10 = Nov, 11 = Dez
+  const day = now.getDate();
+
+  // Aktiv ab 25. November bis einschließlich 6. Januar
+  const isChristmasSeason =
+    (month === 10 && day >= 25) ||
+    month === 11 ||
+    (month === 0 && day <= 6);
+
+  if (!isChristmasSeason) return;
+
+  document.addEventListener("DOMContentLoaded", () => {
+    // Winterlich dunklen, bläulichen Hintergrund aktivieren
+    document.body.classList.add("xmas-theme");
+
+    // 1. Größeren Schneemann unten links einfügen
+    const snowman = document.createElement("div");
+    snowman.className = "xmas-snowman";
+    snowman.textContent = "⛄";
+    snowman.setAttribute("aria-hidden", "true");
+    document.body.appendChild(snowman);
+
+    // 2. Schneeflocken-Generator (größer, kräftiger und etwas dichter)
+    const flakes = ["❄", "❅", "❆", "❄", "❅"];
+    function spawnSnowflake() {
+      if (document.hidden) return;
+      const flake = document.createElement("span");
+      flake.className = "xmas-snowflake";
+      flake.textContent = flakes[Math.floor(Math.random() * flakes.length)];
+
+      const size = Math.random() * 18 + 16; // 16px bis 34px
+      const startLeft = Math.random() * 100; // 0vw bis 100vw
+      const duration = Math.random() * 5 + 6.5; // 6.5s bis 11.5s
+      const opacity = Math.random() * 0.25 + 0.75; // 0.75 bis 1.0 (stark sichtbar)
+
+      flake.style.left = startLeft + "vw";
+      flake.style.fontSize = size + "px";
+      flake.style.opacity = opacity.toFixed(2);
+      flake.style.animationDuration = duration + "s";
+
+      document.body.appendChild(flake);
+
+      setTimeout(() => {
+        flake.remove();
+      }, duration * 1000 + 200);
+    }
+
+    // Alle 320 ms eine neue Schneeflocke
+    setInterval(spawnSnowflake, 320);
+
+    // 3. Weihnachtsmann auf Schlitten zu zufälligen Zeiten & Höhen fliegen lassen
+    function spawnSanta() {
+      if (!document.hidden) {
+        const santa = document.createElement("div");
+        santa.className = "xmas-santa";
+        santa.setAttribute("aria-hidden", "true");
+
+        // Zufällige Flughöhe zwischen 10% und 42% der Bildschirmhöhe
+        const randomTop = Math.floor(Math.random() * 32) + 10;
+        santa.style.top = randomTop + "vh";
+
+        santa.innerHTML = '<span class="xmas-santa-inner">🎅🛷🦌🦌</span>';
+        document.body.appendChild(santa);
+
+        setTimeout(() => {
+          santa.remove();
+        }, 13500);
+      }
+
+      // Nächsten Flug zufällig in 15 bis 55 Sekunden planen
+      const nextDelay = Math.floor(Math.random() * 40000) + 15000;
+      setTimeout(spawnSanta, nextDelay);
+    }
+
+    // Erster Flug zufällig zwischen 3 und 12 Sekunden nach Seitenaufruf
+    const initialDelay = Math.floor(Math.random() * 9000) + 3000;
+    setTimeout(spawnSanta, initialDelay);
+  });
+})();
+```[cite: 4]
+
+Hinweis beim Speichern: Falls deine Dateien im Projektordner `static/css/style.css` und `static/js/script.js` heißen, speichere den jeweiligen Inhalt wieder unter diesen exakten Namen ab.
