@@ -21,6 +21,290 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+  <style>
+    .xmas-hero {
+      padding: 64px 0 36px;
+    }
+
+    .xmas-lead {
+      max-width: 640px;
+    }
+
+    /* ---------- Adventskranz ---------- */
+    .wreath-card {
+      background: linear-gradient(180deg, rgba(16, 28, 46, 0.92), rgba(11, 20, 34, 0.96));
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 18px;
+      padding: 36px 24px 30px;
+      box-shadow: 0 18px 42px rgba(0, 0, 0, 0.35);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .wreath-stage {
+      position: relative;
+      width: 280px;
+      height: 280px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .wreath-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.45));
+    }
+
+    .wreath-candles-ring {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      height: 100%;
+    }
+
+    .wreath-candle {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* 4 Kerzen rund um den Kranz: 1 = oben, 2 = rechts, 3 = unten, 4 = links */
+    .wreath-candle--1 { top: 44px;  left: 140px; }
+    .wreath-candle--2 { top: 140px; left: 236px; }
+    .wreath-candle--3 { top: 236px; left: 140px; }
+    .wreath-candle--4 { top: 140px; left: 44px;  }
+
+    .flame-slot {
+      height: 24px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      margin-bottom: 2px;
+    }
+
+    .flame {
+      position: relative;
+      width: 12px;
+      height: 20px;
+      border-radius: 50% 50% 35% 35% / 65% 65% 35% 35%;
+      background: radial-gradient(circle at 50% 72%, #ffffff 10%, #ffe066 42%, #ff8c00 76%, #e62e00 100%);
+      box-shadow:
+        0 0 10px 3px rgba(255, 195, 65, 0.85),
+        0 0 24px 8px rgba(255, 110, 15, 0.45);
+      transform-origin: 50% 90%;
+      animation: flame-dance 1.15s ease-in-out infinite alternate;
+    }
+
+    .flame::after {
+      content: "";
+      position: absolute;
+      inset: -14px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 185, 50, 0.28) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    @keyframes flame-dance {
+      0%   { transform: scale(0.92, 0.96) rotate(-3deg); }
+      50%  { transform: scale(1.04, 1.05) rotate(2deg); }
+      100% { transform: scale(0.97, 1.08) rotate(-1.5deg); }
+    }
+
+    .candle-body {
+      width: 22px;
+      height: 44px;
+      border-radius: 5px 5px 4px 4px;
+      background: linear-gradient(90deg, #8e111d 0%, #dc2638 45%, #f04858 70%, #840e19 100%);
+      border: 1px solid rgba(255, 220, 220, 0.25);
+      box-shadow: 0 5px 12px rgba(0, 0, 0, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono, monospace);
+      font-size: 11px;
+      font-weight: 700;
+      color: #fff5f5;
+      opacity: 0.58;
+      transition: opacity 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .wreath-candle--lit .candle-body {
+      opacity: 1;
+      transform: translateY(-2px);
+      box-shadow:
+        0 0 14px rgba(255, 165, 40, 0.45),
+        0 6px 14px rgba(0, 0, 0, 0.45);
+    }
+
+    .wreath-caption {
+      margin: 0;
+      font-size: 16px;
+      color: #d6e0f0;
+    }
+
+    .wreath-caption strong {
+      color: #ffffff;
+    }
+
+    /* ---------- Adventskalender ---------- */
+    .advent-panel {
+      background: linear-gradient(180deg, rgba(16, 28, 46, 0.9), rgba(11, 20, 34, 0.95));
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 18px;
+      padding: 26px;
+      box-shadow: 0 18px 42px rgba(0, 0, 0, 0.32);
+    }
+
+    .advent-info-banner {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 12px;
+      padding: 14px 18px;
+      margin-bottom: 24px;
+      color: #e6eefc;
+      font-size: 15px;
+    }
+
+    .advent-grid {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    @media (max-width: 900px) {
+      .advent-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 560px) {
+      .advent-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+      }
+    }
+
+    .door-tile {
+      position: relative;
+      min-height: 104px;
+      padding: 14px 10px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      background: linear-gradient(145deg, #243b5e 0%, #172740 100%);
+      color: #ffffff;
+      font-family: inherit;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+    }
+
+    /* Festlicher Akzent auf jedem 3. / 4. Türchen */
+    .door-tile:nth-child(4n) {
+      background: linear-gradient(145deg, #7f1d27 0%, #4b1017 100%);
+      border-color: rgba(255, 130, 145, 0.35);
+    }
+
+    .door-tile--unlocked {
+      border-color: rgba(255, 200, 90, 0.65);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
+    }
+
+    .door-tile--unlocked:hover {
+      transform: translateY(-4px) scale(1.02);
+      border-color: #ffd166;
+      box-shadow: 0 12px 24px rgba(255, 190, 60, 0.22);
+    }
+
+    .door-tile--today {
+      border-color: #ffd166;
+      box-shadow: 0 0 0 3px rgba(255, 209, 102, 0.3), 0 10px 22px rgba(0, 0, 0, 0.35);
+    }
+
+    .door-tile--opened {
+      background: linear-gradient(145deg, #1d4638 0%, #122c23 100%);
+      border-color: rgba(110, 231, 183, 0.55);
+    }
+
+    .door-tile--locked {
+      opacity: 0.52;
+      cursor: not-allowed;
+      background: linear-gradient(145deg, #162133 0%, #0f1724 100%);
+    }
+
+    .door-num {
+      font-family: var(--font-display, sans-serif);
+      font-size: 34px;
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: 0.02em;
+    }
+
+    .door-sub {
+      font-family: var(--font-mono, monospace);
+      font-size: 11px;
+      letter-spacing: 0.04em;
+      color: #dbe7fa;
+    }
+
+    .door-opened-badge {
+      display: none;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: rgba(16, 185, 129, 0.22);
+      border: 1px solid rgba(110, 231, 183, 0.5);
+      color: #a7f3d0;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .door-tile--opened .door-opened-badge {
+      display: inline-block;
+    }
+
+    .door-modal-card {
+      margin-top: 24px;
+      background: rgba(10, 18, 30, 0.96);
+      border: 1.5px solid rgba(255, 209, 102, 0.7);
+      border-radius: 16px;
+      padding: 22px 24px;
+      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.45);
+    }
+
+    .door-modal-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .door-close-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .door-close-btn:hover {
+      background: rgba(255, 255, 255, 0.16);
+    }
+  </style>
 </head>
 <body>
 
@@ -59,17 +343,17 @@
   <div class="hazard-stripe" aria-hidden="true"></div>
 
   <main id="top">
-    <section class="hero" style="padding: 64px 0 40px;">
-      <div class="wrap hero-inner">
+    <section class="hero xmas-hero">
+      <div class="wrap hero-inner xmas-lead">
         <p class="eyebrow">Winter-Special</p>
-        <h1 class="hero-title" style="font-size: clamp(32px, 5vw, 56px);">Weihnachten bei {{ channel.name }}</h1>
+        <h1 class="hero-title" style="font-size: clamp(32px, 5vw, 54px);">Weihnachten bei {{ channel.name }}</h1>
         <p class="hero-tagline">
-          Hier brennt unser Adventskranz und jeden Tag im Dezember öffnet sich ein neues Türchen –
-          alle bisherigen Türchen bleiben natürlich offen.
+          Hier leuchtet unser Adventskranz mit den passenden Kerzen zu jedem Advent – und im Dezember
+          öffnet sich Tag für Tag ein neues Türchen.
         </p>
         <div class="hero-cta">
           <a href="#adventskalender" class="btn btn-primary">Zum Adventskalender</a>
-          <a href="/#top" class="btn btn-ghost">← Zurück zur Startseite</a>
+          <a href="/event" class="btn btn-ghost">← Alle Events</a>
         </div>
       </div>
     </section>
@@ -80,25 +364,51 @@
         <p class="eyebrow">Adventszeit</p>
         <h2 class="section-title">Adventskranz</h2>
 
-        <div class="wreath-box">
-          <div class="wreath-candles" aria-label="{{ xmas.lit_candles }} von 4 Kerzen brennen">
-            {% for i in range(1, 5) %}
-            {% set is_lit = i <= xmas.lit_candles %}
-            <div class="candle-item {% if is_lit %}candle-item--lit{% endif %}">
-              <div class="candle-flame-wrap">
-                {% if is_lit %}<span class="candle-flame" aria-hidden="true"></span>{% endif %}
+        <div class="wreath-card">
+          <div class="wreath-stage" aria-label="{{ xmas.lit_candles }} von 4 Kerzen brennen">
+            <!-- Tannengrün-Kranz als SVG -->
+            <svg class="wreath-svg" viewBox="0 0 280 280" aria-hidden="true">
+              <defs>
+                <radialGradient id="pineGrad" cx="50%" cy="45%" r="55%">
+                  <stop offset="62%" stop-color="#144529" />
+                  <stop offset="82%" stop-color="#1f6b3e" />
+                  <stop offset="96%" stop-color="#113821" />
+                  <stop offset="100%" stop-color="#0b2415" />
+                </radialGradient>
+              </defs>
+              <circle cx="140" cy="140" r="96" fill="none" stroke="url(#pineGrad)" stroke-width="38" stroke-dasharray="14 6" />
+              <circle cx="140" cy="140" r="96" fill="none" stroke="#2a824d" stroke-width="14" stroke-dasharray="7 11" opacity="0.7" />
+              <!-- Kleine rote Weihnachtskugeln am Kranz -->
+              <circle cx="82"  cy="66"  r="7" fill="#dc2638" />
+              <circle cx="204" cy="74"  r="7" fill="#dc2638" />
+              <circle cx="212" cy="206" r="7" fill="#dc2638" />
+              <circle cx="74"  cy="204" r="7" fill="#dc2638" />
+              <!-- Rote Schleife unten rechts -->
+              <path d="M188 228 L206 218 L202 238 Z" fill="#e11d48" />
+              <path d="M188 228 L174 216 L176 236 Z" fill="#be123c" />
+              <circle cx="188" cy="228" r="5" fill="#fb7185" />
+            </svg>
+
+            <div class="wreath-candles-ring">
+              {% for i in range(1, 5) %}
+              {% set is_lit = i <= xmas.lit_candles %}
+              <div class="wreath-candle wreath-candle--{{ i }} {% if is_lit %}wreath-candle--lit{% endif %}">
+                <div class="flame-slot">
+                  {% if is_lit %}<span class="flame" aria-hidden="true"></span>{% endif %}
+                </div>
+                <div class="candle-body">{{ i }}</div>
               </div>
-              <div class="candle-wax"><span>{{ i }}</span></div>
+              {% endfor %}
             </div>
-            {% endfor %}
           </div>
-          <p class="wreath-status">
+
+          <p class="wreath-caption">
             {% if xmas.lit_candles == 0 %}
-            Noch brennt keine Kerze – am 1. Advent wird die erste angezündet.
+            Noch brennt keine Kerze – am 1. Advent wird die erste Kerze entzündet.
             {% elif xmas.lit_candles == 1 %}
-            Es brennt <strong>1 von 4 Kerzen</strong> am Adventskranz.
+            Es brennt <strong>1 von 4 Kerzen</strong> am Adventskranz (1. Advent).
             {% else %}
-            Es brennen <strong>{{ xmas.lit_candles }} von 4 Kerzen</strong> am Adventskranz.
+            Es brennen <strong>{{ xmas.lit_candles }} von 4 Kerzen</strong> am Adventskranz ({{ xmas.lit_candles }}. Advent).
             {% endif %}
           </p>
         </div>
@@ -111,46 +421,48 @@
         <p class="eyebrow">1. bis 24. Dezember</p>
         <h2 class="section-title">Adventskalender</h2>
 
-        {% if xmas.unlocked_door == 0 %}
-        <div class="videos-notice" style="margin-bottom: 24px;">
-          Der Adventskalender startet am <strong>1. Dezember</strong>. Bisherige Tage sind noch nicht freigeschaltet – schau ab dem 1. Dezember vorbei!
-        </div>
-        {% else %}
-        <p class="about-text" style="margin-bottom: 24px;">
-          Freigeschaltet sind aktuell Türchen <strong>1 bis {{ xmas.unlocked_door }}</strong>. Alle geöffneten Türchen bleiben dauerhaft offen.
-        </p>
-        {% endif %}
-
-        <div class="advent-grid">
-          {% for door in xmas.doors %}
-          <button
-            type="button"
-            class="advent-door {% if door.unlocked %}advent-door--unlocked{% else %}advent-door--locked{% endif %} {% if door.is_today %}advent-door--today{% endif %}"
-            data-day="{{ door.day }}"
-            data-unlocked="{{ 'true' if door.unlocked else 'false' }}"
-            data-title="{{ door.title | e }}"
-            data-text="{{ door.text | e }}"
-            {% if not door.unlocked %}aria-disabled="true"{% endif %}
-          >
-            <span class="advent-door-num">{{ door.day }}</span>
-            <span class="advent-door-state">
-              {% if door.unlocked %}
-              <span class="advent-visited-tag" data-visited-badge="{{ door.day }}" style="display:none;">✓ Geöffnet</span>
-              {% else %}
-              🔒
-              {% endif %}
-            </span>
-          </button>
-          {% endfor %}
-        </div>
-
-        <div class="advent-viewer" id="advent-viewer" aria-live="polite" style="display:none;">
-          <div class="advent-viewer-head">
-            <span class="news-tag" id="viewer-day-badge">TÜRCCHEN</span>
-            <button type="button" class="advent-viewer-close" id="viewer-close-btn" aria-label="Türchen-Ansicht schließen">✕</button>
+        <div class="advent-panel">
+          {% if xmas.unlocked_door == 0 %}
+          <div class="advent-info-banner">
+            Der Adventskalender startet am <strong>1. Dezember</strong>. Zukünftige Türchen bleiben gesperrt – ab dem 1. Dezember öffnet sich jeden Tag ein neues Türchen, und alle bisherigen bleiben offen.
           </div>
-          <h3 class="news-title" id="viewer-title"></h3>
-          <p class="news-text" id="viewer-text"></p>
+          {% else %}
+          <div class="advent-info-banner">
+            Aktuell sind die Türchen <strong>1 bis {{ xmas.unlocked_door }}</strong> freigeschaltet. Geöffnete Türchen bleiben dauerhaft zugänglich.
+          </div>
+          {% endif %}
+
+          <div class="advent-grid">
+            {% for door in xmas.doors %}
+            <button
+              type="button"
+              class="door-tile {% if door.unlocked %}door-tile--unlocked{% else %}door-tile--locked{% endif %} {% if door.is_today %}door-tile--today{% endif %}"
+              data-day="{{ door.day }}"
+              data-unlocked="{{ 'true' if door.unlocked else 'false' }}"
+              data-title="{{ door.title | e }}"
+              data-text="{{ door.text | e }}"
+              {% if not door.unlocked %}aria-disabled="true"{% endif %}
+            >
+              <span class="door-num">{{ door.day }}</span>
+              <span class="door-sub">
+                {% if door.unlocked %}
+                <span class="door-opened-badge" data-opened-badge="{{ door.day }}">✓ Geöffnet</span>
+                {% else %}
+                🔒 {{ door.day }}.12.
+                {% endif %}
+              </span>
+            </button>
+            {% endfor %}
+          </div>
+
+          <div class="door-modal-card" id="advent-viewer" aria-live="polite" style="display:none;">
+            <div class="door-modal-top">
+              <span class="news-tag" id="viewer-day-badge">TÜRCCHEN</span>
+              <button type="button" class="door-close-btn" id="viewer-close-btn" aria-label="Ansicht schließen">Schließen ✕</button>
+            </div>
+            <h3 class="news-title" id="viewer-title"></h3>
+            <p class="news-text" id="viewer-text"></p>
+          </div>
         </div>
       </div>
     </section>
@@ -186,16 +498,10 @@
         } catch (e) {}
       }
 
-      function refreshBadges() {
-        document.querySelectorAll('[data-visited-badge]').forEach((badge) => {
-          const d = Number(badge.getAttribute('data-visited-badge'));
-          if (openedDays.includes(d)) {
-            badge.style.display = 'inline-block';
-          }
-        });
-        document.querySelectorAll('.advent-door--unlocked').forEach((btn) => {
+      function refreshDoors() {
+        document.querySelectorAll('.door-tile--unlocked').forEach((btn) => {
           const d = Number(btn.getAttribute('data-day'));
-          btn.classList.toggle('advent-door--opened', openedDays.includes(d));
+          btn.classList.toggle('door-tile--opened', openedDays.includes(d));
         });
       }
 
@@ -205,10 +511,11 @@
       const viewerText = document.getElementById('viewer-text');
       const closeBtn = document.getElementById('viewer-close-btn');
 
-      document.querySelectorAll('.advent-door').forEach((btn) => {
+      document.querySelectorAll('.door-tile').forEach((btn) => {
         btn.addEventListener('click', () => {
           const isUnlocked = btn.getAttribute('data-unlocked') === 'true';
           const day = Number(btn.getAttribute('data-day'));
+
           if (!isUnlocked) {
             viewer.style.display = 'block';
             viewerBadge.textContent = `TÜRCCHEN ${day}`;
@@ -220,7 +527,7 @@
           if (!openedDays.includes(day)) {
             openedDays.push(day);
             saveOpened();
-            refreshBadges();
+            refreshDoors();
           }
 
           viewer.style.display = 'block';
@@ -237,7 +544,7 @@
         });
       }
 
-      refreshBadges();
+      refreshDoors();
     })();
   </script>
 </body>
