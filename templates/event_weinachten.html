@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <script>
+    (function () {
+      try {
+        if (localStorage.getItem('mltv-theme') === 'dark') {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+      } catch (e) {}
+    })();
+  </script>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='img/favicon.svg') }}">
+  <link rel="alternate icon" href="{{ url_for('static', filename='img/favicon.png') }}">
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/apple-touch-icon.png') }}">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weihnachten – Adventskranz &amp; Adventskalender – {{ channel.name }}</title>
+  <meta name="description" content="Adventskranz und Adventskalender von {{ channel.name }}.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a href="/#top" class="logo">
+        {% if channel_avatar %}
+        <img class="logo-avatar" src="{{ channel_avatar }}" alt="{{ channel.name }}">
+        {% else %}
+        <span class="logo-mark">MLTV</span>
+        {% endif %}
+        <span class="logo-text">{{ channel.name }}</span>
+      </a>
+      <div class="header-badges">
+        <div class="status-badge">
+          <span class="status-dot"></span>
+          LIVE
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <button type="button" class="theme-pull" aria-label="Zu Dunkelmodus wechseln">
+    <span class="theme-pull-cord"></span>
+    <span class="theme-pull-knob">☀️</span>
+  </button>
+
+  <nav class="quicknav" aria-label="Schnellzugriff">
+    <div class="wrap quicknav-inner">
+      {% for item in nav_items %}
+      <a class="quicknav-link {% if item.href == '/event/weinachten' %}quicknav-link--active{% endif %}" href="{{ item.href }}">{{ item.label }}</a>
+      {% endfor %}
+    </div>
+  </nav>
+
+  <div class="hazard-stripe" aria-hidden="true"></div>
+
+  <main id="top">
+    <section class="hero" style="padding: 64px 0 40px;">
+      <div class="wrap hero-inner">
+        <p class="eyebrow">Winter-Special</p>
+        <h1 class="hero-title" style="font-size: clamp(32px, 5vw, 56px);">Weihnachten bei {{ channel.name }}</h1>
+        <p class="hero-tagline">
+          Hier brennt unser Adventskranz und jeden Tag im Dezember öffnet sich ein neues Türchen –
+          alle bisherigen Türchen bleiben natürlich offen.
+        </p>
+        <div class="hero-cta">
+          <a href="#adventskalender" class="btn btn-primary">Zum Adventskalender</a>
+          <a href="/#top" class="btn btn-ghost">← Zurück zur Startseite</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ ADVENTSKRANZ ============ -->
+    <section class="section" id="adventskranz">
+      <div class="wrap">
+        <p class="eyebrow">Adventszeit</p>
+        <h2 class="section-title">Adventskranz</h2>
+
+        <div class="wreath-box">
+          <div class="wreath-candles" aria-label="{{ xmas.lit_candles }} von 4 Kerzen brennen">
+            {% for i in range(1, 5) %}
+            {% set is_lit = i <= xmas.lit_candles %}
+            <div class="candle-item {% if is_lit %}candle-item--lit{% endif %}">
+              <div class="candle-flame-wrap">
+                {% if is_lit %}<span class="candle-flame" aria-hidden="true"></span>{% endif %}
+              </div>
+              <div class="candle-wax"><span>{{ i }}</span></div>
+            </div>
+            {% endfor %}
+          </div>
+          <p class="wreath-status">
+            {% if xmas.lit_candles == 0 %}
+            Noch brennt keine Kerze – am 1. Advent wird die erste angezündet.
+            {% elif xmas.lit_candles == 1 %}
+            Es brennt <strong>1 von 4 Kerzen</strong> am Adventskranz.
+            {% else %}
+            Es brennen <strong>{{ xmas.lit_candles }} von 4 Kerzen</strong> am Adventskranz.
+            {% endif %}
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ ADVENTSKALENDER ============ -->
+    <section class="section" id="adventskalender">
+      <div class="wrap">
+        <p class="eyebrow">1. bis 24. Dezember</p>
+        <h2 class="section-title">Adventskalender</h2>
+
+        {% if xmas.unlocked_door == 0 %}
+        <div class="videos-notice" style="margin-bottom: 24px;">
+          Der Adventskalender startet am <strong>1. Dezember</strong>. Bisherige Tage sind noch nicht freigeschaltet – schau ab dem 1. Dezember vorbei!
+        </div>
+        {% else %}
+        <p class="about-text" style="margin-bottom: 24px;">
+          Freigeschaltet sind aktuell Türchen <strong>1 bis {{ xmas.unlocked_door }}</strong>. Alle geöffneten Türchen bleiben dauerhaft offen.
+        </p>
+        {% endif %}
+
+        <div class="advent-grid">
+          {% for door in xmas.doors %}
+          <button
+            type="button"
+            class="advent-door {% if door.unlocked %}advent-door--unlocked{% else %}advent-door--locked{% endif %} {% if door.is_today %}advent-door--today{% endif %}"
+            data-day="{{ door.day }}"
+            data-unlocked="{{ 'true' if door.unlocked else 'false' }}"
+            data-title="{{ door.title | e }}"
+            data-text="{{ door.text | e }}"
+            {% if not door.unlocked %}aria-disabled="true"{% endif %}
+          >
+            <span class="advent-door-num">{{ door.day }}</span>
+            <span class="advent-door-state">
+              {% if door.unlocked %}
+              <span class="advent-visited-tag" data-visited-badge="{{ door.day }}" style="display:none;">✓ Geöffnet</span>
+              {% else %}
+              🔒
+              {% endif %}
+            </span>
+          </button>
+          {% endfor %}
+        </div>
+
+        <div class="advent-viewer" id="advent-viewer" aria-live="polite" style="display:none;">
+          <div class="advent-viewer-head">
+            <span class="news-tag" id="viewer-day-badge">TÜRCCHEN</span>
+            <button type="button" class="advent-viewer-close" id="viewer-close-btn" aria-label="Türchen-Ansicht schließen">✕</button>
+          </div>
+          <h3 class="news-title" id="viewer-title"></h3>
+          <p class="news-text" id="viewer-text"></p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <span>{{ channel.name }} © 2026</span>
+      <span class="footer-sep">·</span>
+      <span>Erstellt mit Python &amp; Flask &amp; AI</span>
+      <span class="footer-sep">·</span>
+      <a href="{{ url_for('impressum') }}">Impressum</a>
+      <span class="footer-sep">·</span>
+      <a href="{{ url_for('datenschutz') }}">Datenschutz</a>
+    </div>
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+  <script>
+    (function () {
+      const STORAGE_KEY = 'mltv-advent-opened-2026';
+      let openedDays = [];
+      try {
+        openedDays = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+        if (!Array.isArray(openedDays)) openedDays = [];
+      } catch (e) {
+        openedDays = [];
+      }
+
+      function saveOpened() {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(openedDays));
+        } catch (e) {}
+      }
+
+      function refreshBadges() {
+        document.querySelectorAll('[data-visited-badge]').forEach((badge) => {
+          const d = Number(badge.getAttribute('data-visited-badge'));
+          if (openedDays.includes(d)) {
+            badge.style.display = 'inline-block';
+          }
+        });
+        document.querySelectorAll('.advent-door--unlocked').forEach((btn) => {
+          const d = Number(btn.getAttribute('data-day'));
+          btn.classList.toggle('advent-door--opened', openedDays.includes(d));
+        });
+      }
+
+      const viewer = document.getElementById('advent-viewer');
+      const viewerBadge = document.getElementById('viewer-day-badge');
+      const viewerTitle = document.getElementById('viewer-title');
+      const viewerText = document.getElementById('viewer-text');
+      const closeBtn = document.getElementById('viewer-close-btn');
+
+      document.querySelectorAll('.advent-door').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const isUnlocked = btn.getAttribute('data-unlocked') === 'true';
+          const day = Number(btn.getAttribute('data-day'));
+          if (!isUnlocked) {
+            viewer.style.display = 'block';
+            viewerBadge.textContent = `TÜRCCHEN ${day}`;
+            viewerTitle.textContent = 'Noch verschlossen';
+            viewerText.textContent = `Dieses Türchen öffnet sich erst am ${day}. Dezember.`;
+            return;
+          }
+
+          if (!openedDays.includes(day)) {
+            openedDays.push(day);
+            saveOpened();
+            refreshBadges();
+          }
+
+          viewer.style.display = 'block';
+          viewerBadge.textContent = `TÜRCCHEN ${day}`;
+          viewerTitle.textContent = btn.getAttribute('data-title') || '';
+          viewerText.textContent = btn.getAttribute('data-text') || '';
+          viewer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        });
+      });
+
+      if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+          viewer.style.display = 'none';
+        });
+      }
+
+      refreshBadges();
+    })();
+  </script>
+</body>
+</html>
