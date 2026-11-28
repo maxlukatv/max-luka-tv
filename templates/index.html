@@ -276,6 +276,25 @@
       <div class="wrap">
         <p class="eyebrow">Termine</p>
         <h2 class="section-title">Events</h2>
+
+        <!-- Weihnachts-Vorschau -->
+        <article class="news-card xmas-preview-card" style="margin-bottom: 18px;">
+          <div class="news-meta">
+            <span class="news-tag">ADVENT &amp; WEIHNACHTEN</span>
+            <span class="news-date">{{ xmas.lit_candles }}/4 Kerzen</span>
+          </div>
+          <h3 class="news-title">Adventskranz &amp; Adventskalender</h3>
+          <p class="news-text">
+            {% if xmas.unlocked_door > 0 %}
+            Aktuell sind die Türchen <strong>1 bis {{ xmas.unlocked_door }}</strong> geöffnet und
+            <strong>{{ xmas.lit_candles }} von 4 Kerzen</strong> am Adventskranz brennen.
+            {% else %}
+            Der Adventskranz brennt mit <strong>{{ xmas.lit_candles }} von 4 Kerzen</strong> – der Adventskalender mit 24 Türchen startet am 1. Dezember.
+            {% endif %}
+          </p>
+          <a class="btn btn-primary" href="/event/weinachten" style="margin-top: 14px;">Zur Weihnachtsseite</a>
+        </article>
+
         {% if events %}
         <div class="news-list">
           {% for event in events %}
@@ -293,7 +312,7 @@
           {% endfor %}
         </div>
         {% else %}
-        <div class="videos-notice">Aktuell sind keine Events geplant - schau bald wieder vorbei!</div>
+        <div class="videos-notice">Aktuell sind keine weiteren Events geplant - schau bald wieder vorbei!</div>
         {% endif %}
       </div>
     </section>
