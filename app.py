@@ -713,18 +713,17 @@ def event():
         links=LINKS,
         nav_items=NAV_ITEMS,
         events=EVENTS,
+        xmas=get_christmas_context(),
         channel_avatar=_get_channel_avatar_safe(),
     )
 
 
-@app.route("/event")
-def event():
+@app.route("/event/weinachten")
+def event_weinachten():
     return render_template(
-        "event.html",
+        "event_weinachten.html",
         channel=CHANNEL,
-        links=LINKS,
         nav_items=NAV_ITEMS,
-        events=EVENTS,
         xmas=get_christmas_context(),
         channel_avatar=_get_channel_avatar_safe(),
     )
