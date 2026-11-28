@@ -1,4 +1,5 @@
 import os
+import random
 import re
 import time
 from datetime import datetime, timedelta
@@ -356,6 +357,10 @@ def get_christmas_context():
                 "text": item["text"] if is_unlocked else f"Öffnet am {item['day']}. Dezember.",
             }
         )
+
+    # Feste Mischung für 2026: Türchen liegen durcheinander, bleiben aber bei jedem Reload gleich
+    rng = random.Random(2026)
+    rng.shuffle(doors)
 
     return {
         "is_xmas_season": is_xmas_season,
