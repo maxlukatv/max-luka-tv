@@ -145,6 +145,7 @@ NAV_ITEMS = [
     {"label": "Shorts", "href": "/#latest-shorts"},
     {"label": "Playlists", "href": "/#playlists"},
     {"label": "Events", "href": "/event"},
+    {"label": "Weihnachten", "href": "/event/weinachten"},
     {"label": "News", "href": "/news"},
     {"label": "Einsendung", "href": "/einsendung"},
     {"label": "Schiene & Weiche", "href": "/schiene_und_weiche"},
@@ -260,6 +261,111 @@ SCHIENE_STRAFEN_HINWEIS = (
     "dauert 1-3 Wochen an; bei einer erneuten Verwarnung während dieser "
     "Zeit folgt der Ausschluss."
 )
+
+# ---------------------------------------------------------------------------
+# Weihnachts-Seite: Adventskranz & Adventskalender
+# ---------------------------------------------------------------------------
+
+# Optional für Tests: z. B. XMAS_TEST_MONTH = 12, XMAS_TEST_DAY = 10
+# Im Normalbetrieb auf None lassen, damit das echte Datum genutzt wird.
+XMAS_TEST_MONTH = None
+XMAS_TEST_DAY = None
+
+ADVENT_CALENDAR_DOORS = [
+    {"day": 1, "title": "Start ins Signalbuch", "text": "Das erste Türchen ist offen! Kennst du den Unterschied zwischen Haupt- und Vorsignal?"},
+    {"day": 2, "title": "Winterliche Stellwerke", "text": "Wenn draußen Frost liegt, müssen Weichenheizungen zuverlässig arbeiten."},
+    {"day": 3, "title": "Blick an die Strecke", "text": "Manchmal sind es die ruhigen Wintermomente am Gleis, die am besten in Erinnerung bleiben."},
+    {"day": 4, "title": "Modellbahn-Werkstatt", "text": "Perfektes Wetter, um an Modulen, Signalen oder der Beleuchtung zu tüfteln."},
+    {"day": 5, "title": "Sonderzug-Fieber", "text": "Besondere Züge im Winterlicht sorgen auf dem Kanal immer für Highlights."},
+    {"day": 6, "title": "Nikolaus-Gruß", "text": "Frohen Nikolaustag an alle aus der Community – danke fürs Dabeisein!"},
+    {"day": 7, "title": "Form- oder Lichtsignal?", "text": "Beide haben ihren ganz eigenen Charme – im Quiz kannst du dein Wissen testen."},
+    {"day": 8, "title": "Pünktlichkeit & Takt", "text": "Schon kleine Verspätungen können im Fahrplan spürbare Wellen schlagen."},
+    {"day": 9, "title": "Kamera bereit", "text": "Gutes Licht im Dezember ist oft kurz – also rechtzeitig an den Spot fahren."},
+    {"day": 10, "title": "Community-Moment", "text": "Austausch, Fotos und Störungsmeldungen halten Schiene & Weiche lebendig."},
+    {"day": 11, "title": "Freie Fahrt voraus", "text": "Halbzeit bis Heiligabend – schon elf Türchen sind geöffnet!"},
+    {"day": 12, "title": "Streckenkunde", "text": "Jede Haupt- und Nebenbahn erzählt ihre eigene Geschichte."},
+    {"day": 13, "title": "Dämmerung am Gleis", "text": "Wenn Signale und Zugspitzenlichter im Dunkeln besonders klar leuchten."},
+    {"day": 14, "title": "Kleine Rückschau", "text": "Welche Videos und Shorts von Max-Luka TV haben dir dieses Jahr am besten gefallen?"},
+    {"day": 15, "title": "Weiche gestellt", "text": "Manchmal braucht es nur den richtigen Impuls zur richtigen Zeit."},
+    {"day": 16, "title": "Kurz vor dem Endspurt", "text": "Zwei Drittel des Adventskalenders sind geschafft!"},
+    {"day": 17, "title": "Soundcheck", "text": "Das Signalhorn in der Ferne – eines der markantesten Geräusche überhaupt."},
+    {"day": 18, "title": "Gleisgeflüster", "text": "Noch sechs Tage bis zum großen Fest – genießt die Adventszeit."},
+    {"day": 19, "title": "Winterfahrplan", "text": "Kälte, Dunkelheit und besondere Umläufe prägen den Dezember."},
+    {"day": 20, "title": "Alle vier Kerzen", "text": "Spätestens jetzt leuchtet der Adventskranz in voller Pracht."},
+    {"day": 21, "title": "Fast geschafft", "text": "Nur noch drei Türchen bis Heiligabend!"},
+    {"day": 22, "title": "Vorfreude", "text": "Die letzten Tage vor Weihnachten laufen – danke für euren Support!"},
+    {"day": 23, "title": "Letzter Tag davor", "text": "Morgen ist es soweit: Türchen 24 wartet schon."},
+    {"day": 24, "title": "Frohe Weihnachten!", "text": "Alles Gute zum Weihnachtsfest wünscht Max-Luka TV & Schiene und Weiche!"},
+]
+
+
+def _get_effective_now():
+    real_now = datetime.now()
+    if XMAS_TEST_MONTH is not None and XMAS_TEST_DAY is not None:
+        return real_now.replace(month=XMAS_TEST_MONTH, day=XMAS_TEST_DAY)
+    return real_now
+
+
+def _count_lit_candles(dt):
+    """Berechnet, wie viele der 4 Adventskerzen am gegebenen Datum brennen."""
+    year = dt.year
+    christmas_eve = datetime(year, 12, 24)
+    days_since_sunday = (christmas_eve.weekday() + 1) % 7
+    fourth_advent = datetime(year, 12, 24 - days_since_sunday)
+    first_advent = datetime(fourth_advent.year, fourth_advent.month, fourth_advent.day - 21)
+    second_advent = datetime(fourth_advent.year, fourth_advent.month, fourth_advent.day - 14)
+    third_advent = datetime(fourth_advent.year, fourth_advent.month, fourth_advent.day - 7)
+
+    current_day = dt.replace(hour=0, minute=0, second=0, microsecond=0)
+    if current_day >= fourth_advent:
+        return 4
+    if current_day >= third_advent:
+        return 3
+    if current_day >= second_advent:
+        return 2
+    if current_day >= first_advent:
+        return 1
+    return 0
+
+
+def get_christmas_context():
+    now = _get_effective_now()
+    month = now.month
+    day = now.day
+
+    is_xmas_season = (month == 11 and day >= 25) or (month == 12) or (month == 1 and day <= 6)
+
+    if month == 12:
+        unlocked_door = min(day, 24)
+    elif month == 1 and day <= 6:
+        unlocked_door = 24
+    else:
+        unlocked_door = 0
+
+    lit_candles = _count_lit_candles(now)
+
+    doors = []
+    for item in ADVENT_CALENDAR_DOORS:
+        is_unlocked = item["day"] <= unlocked_door
+        doors.append(
+            {
+                "day": item["day"],
+                "unlocked": is_unlocked,
+                "is_today": month == 12 and item["day"] == day and item["day"] <= 24,
+                "title": item["title"] if is_unlocked else "Noch verschlossen",
+                "text": item["text"] if is_unlocked else f"Öffnet am {item['day']}. Dezember.",
+            }
+        )
+
+    return {
+        "is_xmas_season": is_xmas_season,
+        "month": month,
+        "day": day,
+        "unlocked_door": unlocked_door,
+        "lit_candles": lit_candles,
+        "doors": doors,
+    }
+
 
 LATEST_VIDEOS_COUNT = 5
 TOP_VIDEOS_COUNT = 5
@@ -572,6 +678,7 @@ def index():
         links=LINKS,
         nav_items=NAV_ITEMS,
         events=EVENTS,
+        xmas=get_christmas_context(),
         latest_videos=latest_videos,
         top_videos=top_videos,
         latest_shorts=latest_shorts,
@@ -606,6 +713,19 @@ def event():
         links=LINKS,
         nav_items=NAV_ITEMS,
         events=EVENTS,
+        channel_avatar=_get_channel_avatar_safe(),
+    )
+
+
+@app.route("/event")
+def event():
+    return render_template(
+        "event.html",
+        channel=CHANNEL,
+        links=LINKS,
+        nav_items=NAV_ITEMS,
+        events=EVENTS,
+        xmas=get_christmas_context(),
         channel_avatar=_get_channel_avatar_safe(),
     )
 
@@ -674,21 +794,6 @@ def datenschutz():
         channel=CHANNEL,
         nav_items=NAV_ITEMS,
         channel_avatar=_get_channel_avatar_safe(),
-    )
-
-
-# --- 404 Fehlerseite ---
-
-@app.errorhandler(404)
-def page_not_found(e):
-    return (
-        render_template(
-            "404.html",
-            channel=CHANNEL,
-            nav_items=NAV_ITEMS,
-            channel_avatar=_get_channel_avatar_safe(),
-        ),
-        404,
     )
 
 
