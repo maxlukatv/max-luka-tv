@@ -1,7 +1,7 @@
 import os
 import re
 import time
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import requests
 from flask import Flask, render_template, jsonify
@@ -312,9 +312,9 @@ def _count_lit_candles(dt):
     christmas_eve = datetime(year, 12, 24)
     days_since_sunday = (christmas_eve.weekday() + 1) % 7
     fourth_advent = datetime(year, 12, 24 - days_since_sunday)
-    first_advent = datetime(fourth_advent.year, fourth_advent.month, fourth_advent.day - 21)
-    second_advent = datetime(fourth_advent.year, fourth_advent.month, fourth_advent.day - 14)
-    third_advent = datetime(fourth_advent.year, fourth_advent.month, fourth_advent.day - 7)
+    first_advent = fourth_advent - timedelta(days=21)
+    second_advent = fourth_advent - timedelta(days=14)
+    third_advent = fourth_advent - timedelta(days=7)
 
     current_day = dt.replace(hour=0, minute=0, second=0, microsecond=0)
     if current_day >= fourth_advent:
